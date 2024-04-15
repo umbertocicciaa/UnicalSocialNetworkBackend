@@ -32,5 +32,11 @@ public class UserServiceImpl implements UserService {
                 .orElse(null);
     }
 
-    
+    @Override
+    public UserDTO createUser(UserDTO userDTO) {
+        UserEntity user = UserMapper.ISTANCE.userDtoToUser(userDTO);
+        UserEntity userAdded = userRepository.save(user);
+        return UserMapper.ISTANCE.userToUSerDto(userAdded);
+    }
+
 }
