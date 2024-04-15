@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageDTO {
+    private int id;
     private String text;
     private Object sentDatetime;
     private int conversationId;

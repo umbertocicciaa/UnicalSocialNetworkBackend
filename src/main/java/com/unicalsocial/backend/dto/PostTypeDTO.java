@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostTypeDTO {
+    private int id;
     private String postTypeName;
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDTO {
+    private int id;
     private int createdByUserid;
     private Object createDatetime;
     private String caption;

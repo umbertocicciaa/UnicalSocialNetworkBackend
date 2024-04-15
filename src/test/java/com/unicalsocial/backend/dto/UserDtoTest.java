@@ -29,7 +29,7 @@ public class UserDtoTest {
     @Test
     public void shouldMapUser() {
         //given
-        UserDTO userDTO = new UserDTO("umberto domenico", "ciccia", "umbertocicciaa", Calendar.getInstance());
+        UserDTO userDTO = new UserDTO(1,"umberto domenico", "ciccia", "umbertocicciaa", Calendar.getInstance());
         //when
         UserEntity user = UserMapper.ISTANCE.userDtoToUser(userDTO);
         //then

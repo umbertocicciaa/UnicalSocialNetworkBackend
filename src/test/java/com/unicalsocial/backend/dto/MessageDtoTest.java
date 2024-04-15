@@ -25,7 +25,7 @@ public class MessageDtoTest {
 
     @Test
     public void shouldBeMessage() {
-        MessageDTO messageDTO = new MessageDTO("Ciao ciccio", Calendar.getInstance(), 1);
+        MessageDTO messageDTO = new MessageDTO(1,"Ciao ciccio", Calendar.getInstance(), 1);
 
         MessageEntity message = MessageMapper.ISTANCE.messageDtoToMessage(messageDTO);
 
