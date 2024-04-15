@@ -7,7 +7,6 @@ import com.unicalsocial.backend.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 import java.util.List;
 
 @Service
@@ -26,5 +25,12 @@ public class UserServiceImpl implements UserService {
         return userDTOS;
     }
 
+    @Override
+    public UserDTO getUserById(int id) {
+        return userRepository.findById(id)
+                .map(UserMapper.ISTANCE::userToUSerDto)
+                .orElse(null);
+    }
 
+    
 }
