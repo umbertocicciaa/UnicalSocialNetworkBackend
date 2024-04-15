@@ -3,6 +3,8 @@ package com.unicalsocial.backend.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @Table(name = "group_member", schema = "public", catalog = "unical_social_network")
@@ -18,10 +20,10 @@ public class GroupMemberEntity {
     private int conversationId;
     @Basic
     @Column(name = "joined_datetime")
-    private Object joinedDatetime;
+    private LocalDateTime joinedDatetime;
     @Basic
     @Column(name = "left_datetime")
-    private Object leftDatetime;
+    private LocalDateTime leftDatetime;
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserEntity userByUserId;

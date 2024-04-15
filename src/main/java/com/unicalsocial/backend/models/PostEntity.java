@@ -3,6 +3,8 @@ package com.unicalsocial.backend.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 
 
@@ -15,16 +17,16 @@ public class PostEntity {
     @Column(name = "id")
     private int id;
     @Basic
-    @Column(name = "created_by_userid")
+    @Column(name = "created_by_userid",insertable = false,updatable = false)
     private int createdByUserid;
     @Basic
     @Column(name = "create_datetime")
-    private Object createDatetime;
+    private LocalDateTime createDatetime;
     @Basic
     @Column(name = "caption")
     private String caption;
     @Basic
-    @Column(name = "post_type")
+    @Column(name = "post_type",insertable = false,updatable = false)
     private int postType;
     @OneToMany(mappedBy = "postByPostId")
     private Collection<CommentEntity> commentsById;

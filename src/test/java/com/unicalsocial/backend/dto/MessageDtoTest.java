@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 public class MessageDtoTest {
@@ -14,7 +15,7 @@ public class MessageDtoTest {
         MessageEntity message = new MessageEntity();
         message.setText("Ciao ciccio");
         message.setConversationId(1);
-        message.setSentDatetime(Calendar.getInstance());
+        message.setSentDatetime(LocalDateTime.now());
 
         MessageDTO messageDTO = MessageMapper.ISTANCE.messageToDto(message);
 
@@ -25,7 +26,7 @@ public class MessageDtoTest {
 
     @Test
     public void shouldBeMessage() {
-        MessageDTO messageDTO = new MessageDTO(1,"Ciao ciccio", Calendar.getInstance(), 1);
+        MessageDTO messageDTO = new MessageDTO(1,"Ciao ciccio", LocalDateTime.now(), 1);
 
         MessageEntity message = MessageMapper.ISTANCE.messageDtoToMessage(messageDTO);
 

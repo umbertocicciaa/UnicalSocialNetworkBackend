@@ -3,6 +3,7 @@ package com.unicalsocial.backend.dto;
 import com.unicalsocial.backend.models.UserEntity;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,7 +15,7 @@ public class UserDtoTest {
         UserEntity user = new UserEntity();
         user.setFirstName("umberto domenico");
         user.setLastName("ciccia");
-        user.setSignupDate(Calendar.getInstance());
+        user.setSignupDate(LocalDateTime.now());
         user.setProfileName("umbertocicciaa");
         //when
         UserDTO userDTO = UserMapper.ISTANCE.userToUSerDto(user);
@@ -29,7 +30,7 @@ public class UserDtoTest {
     @Test
     public void shouldMapUser() {
         //given
-        UserDTO userDTO = new UserDTO(1,"umberto domenico", "ciccia", "umbertocicciaa", Calendar.getInstance());
+        UserDTO userDTO = new UserDTO(1, "umberto domenico", "ciccia", "umbertocicciaa", LocalDateTime.now());
         //when
         UserEntity user = UserMapper.ISTANCE.userDtoToUser(userDTO);
         //then

@@ -3,6 +3,7 @@ package com.unicalsocial.backend.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
@@ -20,7 +21,7 @@ public class UserEntity {
     private String profileName;
     @Basic
     @Column(name = "signup_date")
-    private Object signupDate;
+    private LocalDateTime signupDate;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id")
