@@ -1,10 +1,9 @@
 package com.unicalsocial.backend.dto;
 
-import com.unicalsocial.backend.models.UserEntity;
+import com.unicalsocial.backend.user.UserEntity;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,7 +17,7 @@ public class UserDtoTest {
         user.setSignupDate(LocalDateTime.now());
         user.setProfileName("umbertocicciaa");
         //when
-        UserDTO userDTO = UserMapper.ISTANCE.userToUSerDto(user);
+        UserDTO userDTO = UserMapper.ISTANCE.userToUserDto(user);
         //then
         assertThat(userDTO).isNotNull();
         assertThat(userDTO.getFirstName()).isEqualTo(user.getFirstName());

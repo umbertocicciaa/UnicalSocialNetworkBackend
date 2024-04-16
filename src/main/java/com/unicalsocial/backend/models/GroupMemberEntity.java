@@ -1,5 +1,6 @@
 package com.unicalsocial.backend.models;
 
+import com.unicalsocial.backend.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 

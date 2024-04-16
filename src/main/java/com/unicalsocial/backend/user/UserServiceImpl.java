@@ -1,15 +1,15 @@
-package com.unicalsocial.backend.services;
+package com.unicalsocial.backend.user;
 
 import com.unicalsocial.backend.dto.UserDTO;
 import com.unicalsocial.backend.dto.UserMapper;
-import com.unicalsocial.backend.models.UserEntity;
-import com.unicalsocial.backend.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
@@ -18,17 +18,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserDTO> getAllUser() {
         List<UserEntity> userEntities = userRepository.findAll();
         List<UserDTO> userDTOS = new ArrayList<>();
-        userEntities.forEach(userEntity -> userDTOS.add(UserMapper.ISTANCE.userToUSerDto(userEntity)));
+        userEntities.forEach(userEntity -> userDTOS.add(UserMapper.ISTANCE.userToUserDto(userEntity)));
         return userDTOS;
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDTO getUserById(int id) {
         return userRepository.findById(id)
-                .map(UserMapper.ISTANCE::userToUSerDto)
+                .map(UserMapper.ISTANCE::userToUserDto)
                 .orElse(null);
     }
 
@@ -36,7 +38,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO createUser(UserDTO userDTO) {
         UserEntity user = UserMapper.ISTANCE.userDtoToUser(userDTO);
         UserEntity userAdded = userRepository.save(user);
-        return UserMapper.ISTANCE.userToUSerDto(userAdded);
+        return UserMapper.ISTANCE.userToUserDto(userAdded);
     }
 
 }

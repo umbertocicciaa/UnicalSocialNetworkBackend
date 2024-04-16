@@ -1,6 +1,6 @@
 package com.unicalsocial.backend.dto;
 
-import com.unicalsocial.backend.models.UserEntity;
+import com.unicalsocial.backend.user.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -13,7 +13,7 @@ public interface UserMapper {
     @Mapping(source="lastName",target = "lastName")
     @Mapping(source="profileName",target = "profileName")
     @Mapping(source="signupDate",target = "signupDate")
-    UserDTO userToUSerDto (UserEntity user);
+    UserDTO userToUserDto(UserEntity user);
 
     @Mapping(source="firstName",target = "firstName")
     @Mapping(source="lastName",target = "lastName")

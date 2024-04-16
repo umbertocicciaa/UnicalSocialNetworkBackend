@@ -1,6 +1,5 @@
-package com.unicalsocial.backend.repositories;
+package com.unicalsocial.backend.user;
 
-import com.unicalsocial.backend.models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {

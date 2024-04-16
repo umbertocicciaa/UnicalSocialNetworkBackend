@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.services;
+package com.unicalsocial.backend.user;
 
 import com.unicalsocial.backend.dto.UserDTO;
 

@@ -1,14 +1,13 @@
-package com.unicalsocial.backend.controllers;
+package com.unicalsocial.backend.user;
 
 import com.unicalsocial.backend.dto.UserDTO;
-import com.unicalsocial.backend.services.UserService;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("${api.endpoint}" + "users")
+@RequestMapping("${api.endpoint}")
 public class UserRestController {
 
     private final UserService userService;
@@ -17,12 +16,12 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/**")
+    @GetMapping(value = "/users")
     public List<UserDTO> getUsers() {
         return userService.getAllUser();
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/users/{id}")
     public UserDTO getUsersById(@PathVariable int id) {
         UserDTO userDTO = userService.getUserById(id);
         if (userDTO == null)
@@ -30,7 +29,7 @@ public class UserRestController {
         return userDTO;
     }
 
-    @PostMapping(value = "/save", consumes = "application/json")
+    @PostMapping(value = "/users/save")
     public UserDTO createUser(@RequestBody UserDTO userDTO) {
         return userService.createUser(userDTO);
     }
