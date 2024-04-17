@@ -2,7 +2,10 @@ package com.unicalsocial.backend.user;
 
 import com.unicalsocial.backend.models.*;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -10,6 +13,9 @@ import java.util.Collection;
 @Entity
 @Data
 @Table(name = "user", schema = "public", catalog = "unical_social_network")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserEntity {
     @Basic
     @Column(name = "first_name")

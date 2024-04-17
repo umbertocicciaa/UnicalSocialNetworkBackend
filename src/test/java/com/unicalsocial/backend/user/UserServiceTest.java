@@ -26,16 +26,17 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setUp() {
-        UserEntity userEntity1 = new UserEntity();
-        userEntity1.setFirstName("pippo");
-        userEntity1.setLastName("pippa");
-        userEntity1.setProfileName("pippo");
+        UserEntity userEntity1 = UserEntity.builder()
+                .firstName("pippo")
+                .lastName("pippa")
+                .profileName("pippo")
+                .build();
 
-        UserEntity userEntity2 = new UserEntity();
-        userEntity2.setFirstName("pluto");
-        userEntity2.setLastName("tromba");
-        userEntity2.setProfileName("pluto");
-
+        UserEntity userEntity2 = UserEntity.builder()
+                .firstName("pluto")
+                .lastName("pippa")
+                .profileName("pluto")
+                .build();
         this.user1 = UserMapper.ISTANCE.userToUserDto(userEntity1);
         this.user2 = UserMapper.ISTANCE.userToUserDto(userEntity2);
     }

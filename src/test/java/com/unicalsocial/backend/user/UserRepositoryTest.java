@@ -23,15 +23,17 @@ public class UserRepositoryTest {
 
     @Test
     public void userRepository_getAllUser() {
-        UserEntity userEntity1 = new UserEntity();
-        userEntity1.setFirstName("pippo");
-        userEntity1.setLastName("pippa");
-        userEntity1.setProfileName("pippo");
+        UserEntity userEntity1 = UserEntity.builder()
+                .firstName("pippo")
+                .lastName("pippa")
+                .profileName("pippo")
+                .build();
 
-        UserEntity userEntity2 = new UserEntity();
-        userEntity2.setFirstName("pluto");
-        userEntity2.setLastName("tromba");
-        userEntity2.setProfileName("pluto");
+        UserEntity userEntity2 = UserEntity.builder()
+                .firstName("pluto")
+                .lastName("tromba")
+                .profileName("pluto")
+                .build();
 
         userRepository.save(userEntity1);
         userRepository.save(userEntity2);
@@ -45,20 +47,22 @@ public class UserRepositoryTest {
 
     @Test
     public void userRepository_getUserById() {
-        UserEntity userEntity1 = new UserEntity();
-        userEntity1.setFirstName("pippo");
-        userEntity1.setLastName("pippa");
-        userEntity1.setProfileName("pippo");
+        UserEntity userEntity1 = UserEntity.builder()
+                .firstName("pippo")
+                .lastName("pippa")
+                .profileName("pippo")
+                .build();
         userRepository.save(userEntity1);
         Assertions.assertTrue(userRepository.existsById(userEntity1.getId()));
     }
 
     @Test
     public void userRepository_createUser() {
-        UserEntity userEntity1 = new UserEntity();
-        userEntity1.setFirstName("pippo");
-        userEntity1.setLastName("pippa");
-        userEntity1.setProfileName("pippo");
+        UserEntity userEntity1 = UserEntity.builder()
+                .firstName("pippo")
+                .lastName("pippa")
+                .profileName("pippo")
+                .build();
         UserEntity result = userRepository.save(userEntity1);
         Assertions.assertEquals(userEntity1, result);
     }
