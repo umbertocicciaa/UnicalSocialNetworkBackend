@@ -1,10 +1,12 @@
 package com.unicalsocial.backend.user;
 
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("${api.endpoint}")
@@ -17,21 +19,27 @@ public class UserRestController {
     }
 
     @GetMapping(value = "/users")
-    public List<UserDTO> getUsers() {
-        return userService.getAllUser();
+    public ResponseEntity<List<UserDTO>> getUsers() {
+        var users = this.userService.getAllUser();
+        if (users.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(users);
     }
 
     @GetMapping(value = "/users/{id}")
-    public UserDTO getUsersById(@PathVariable int id) {
-        UserDTO userDTO = userService.getUserById(id);
-        if (userDTO == null)
-            throw new ResourceNotFoundException();
-        return userDTO;
+    public ResponseEntity<UserDTO> getUsersById(@PathVariable int id) {
+        Optional<UserDTO> userDTO = Optional.ofNullable(userService.getUserById(id));
+        return userDTO.map(s -> ResponseEntity.ok().body(s)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping(value = "/users/save")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO createUser(@RequestBody UserDTO userDTO) {
-        return userService.createUser(userDTO);
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+        try {
+            var saved = this.userService.createUser(userDTO);
+            return new ResponseEntity<>(saved, HttpStatus.CREATED);
+        } catch (DataIntegrityViolationException exception) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

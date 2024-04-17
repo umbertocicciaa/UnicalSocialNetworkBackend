@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,6 +23,16 @@ public class UserServiceImpl implements UserService {
         List<UserDTO> userDTOS = new ArrayList<>();
         userEntities.forEach(userEntity -> userDTOS.add(UserMapper.ISTANCE.userToUserDto(userEntity)));
         return userDTOS;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserDTO> getAllUserOrderedBySignUpDate(UserDTO userDTO) {
+        return this.userRepository
+                .findAllByOrderBySignupDateAsc()
+                .stream()
+                .map((UserMapper.ISTANCE::userToUserDto))
+                .collect(Collectors.toList());
     }
 
     @Override
