@@ -1,6 +1,5 @@
-package com.unicalsocial.backend.dto;
+package com.unicalsocial.backend.user;
 
-import com.unicalsocial.backend.user.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

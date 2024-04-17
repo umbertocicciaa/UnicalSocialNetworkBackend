@@ -1,6 +1,5 @@
-package com.unicalsocial.backend.dto;
+package com.unicalsocial.backend.user;
 
-import com.unicalsocial.backend.user.UserEntity;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

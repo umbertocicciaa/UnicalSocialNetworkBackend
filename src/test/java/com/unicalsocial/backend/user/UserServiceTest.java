@@ -1,7 +1,5 @@
 package com.unicalsocial.backend.user;
 
-import com.unicalsocial.backend.dto.UserDTO;
-import com.unicalsocial.backend.dto.UserMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,8 +36,8 @@ public class UserServiceTest {
         userEntity2.setLastName("tromba");
         userEntity2.setProfileName("pluto");
 
-        this.user1 = UserMapper.ISTANCE.userToUserDto(userEntity1); // Using INSTANCE instead of ISTANSE
-        this.user2 = UserMapper.ISTANCE.userToUserDto(userEntity2); // Using INSTANCE instead of ISTANSE
+        this.user1 = UserMapper.ISTANCE.userToUserDto(userEntity1);
+        this.user2 = UserMapper.ISTANCE.userToUserDto(userEntity2);
     }
 
     @Test

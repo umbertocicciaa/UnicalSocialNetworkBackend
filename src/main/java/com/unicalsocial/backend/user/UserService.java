@@ -1,7 +1,5 @@
 package com.unicalsocial.backend.user;
 
-import com.unicalsocial.backend.dto.UserDTO;
-
 import java.util.List;
 
 public interface UserService {

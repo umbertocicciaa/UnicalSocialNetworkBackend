@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.dto;
+package com.unicalsocial.backend.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

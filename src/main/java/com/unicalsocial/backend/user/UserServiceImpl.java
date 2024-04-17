@@ -1,7 +1,5 @@
 package com.unicalsocial.backend.user;
 
-import com.unicalsocial.backend.dto.UserDTO;
-import com.unicalsocial.backend.dto.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,7 +1,7 @@
 package com.unicalsocial.backend.user;
 
-import com.unicalsocial.backend.dto.UserDTO;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +30,7 @@ public class UserRestController {
     }
 
     @PostMapping(value = "/users/save")
+    @ResponseStatus(HttpStatus.CREATED)
     public UserDTO createUser(@RequestBody UserDTO userDTO) {
         return userService.createUser(userDTO);
     }
