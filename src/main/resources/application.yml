@@ -1,0 +1,35 @@
+api:
+    endpoint: /api/v1/
+jwt:
+    auth:
+        converter:
+            principle-attribute: preferred_username
+            resource-id: unical_rest_api
+server:
+    port: 8081
+spring:
+    application:
+        name: Unical Social Network Backend
+    datasource:
+        password: root
+        url: jdbc:postgresql://localhost:5432/unical_social_network
+        username: postgres
+    jpa:
+        hibernate:
+            ddl-auto: create
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                jdbc:
+                    lob:
+                        non_contextual_creation: true
+    mvc:
+        view:
+            prefix: /WEB-INF/jsp/
+            suffix: .jsp
+    security:
+        oauth2:
+            resourceserver:
+                jwt:
+                    issuer-uri: http://localhost:8080/realms/master
+                    jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
