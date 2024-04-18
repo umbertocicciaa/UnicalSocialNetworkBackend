@@ -21,9 +21,8 @@ public class UserRestController {
     @GetMapping(value = "/users")
     public ResponseEntity<List<UserDTO>> getUsers() {
         var users = this.userService.getAllUser();
-        if (users.isEmpty()) {
+        if (users.isEmpty())
             return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok().body(users);
     }
 
