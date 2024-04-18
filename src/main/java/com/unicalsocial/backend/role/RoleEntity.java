@@ -1,4 +1,4 @@
-package role;
+package com.unicalsocial.backend.role;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.unicalsocial.backend.user.UserEntity;
@@ -36,5 +36,4 @@ public class RoleEntity {
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
-
 }
