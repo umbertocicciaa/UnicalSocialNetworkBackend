@@ -1,5 +1,6 @@
-package com.unicalsocial.backend.configurations;
+package com.unicalsocial.backend.security;
 
+import com.unicalsocial.backend.exception.SecurityErrorHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +17,17 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+
     private final JwtAuthConverter jwtAuthConverter;
+    private final SecurityErrorHandler securityErrorHandler;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
-        httpSecurity.oauth2ResourceServer((oauth2) -> oauth2.jwt((jwt) -> jwt.jwtAuthenticationConverter(jwtAuthConverter)));
-        httpSecurity.sessionManagement((session) -> session.sessionCreationPolicy(STATELESS));
-        return httpSecurity.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.sessionManagement(session -> session.sessionCreationPolicy(STATELESS));
+        http.exceptionHandling(exp -> exp.authenticationEntryPoint(securityErrorHandler));
+        http.authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
+        http.oauth2ResourceServer(oauth -> oauth.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthConverter)));
+        return http.build();
     }
 }

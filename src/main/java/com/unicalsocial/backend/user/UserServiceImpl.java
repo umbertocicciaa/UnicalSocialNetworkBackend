@@ -2,21 +2,19 @@ package com.unicalsocial.backend.user;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl{
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @Override
     @Transactional(readOnly = true)
     public List<UserDTO> getAllUser() {
         List<UserEntity> userEntities = userRepository.findAll();
@@ -25,7 +23,6 @@ public class UserServiceImpl implements UserService {
         return userDTOS;
     }
 
-    @Override
     @Transactional(readOnly = true)
     public List<UserDTO> getAllUserOrderedBySignUpDate(UserDTO userDTO) {
         return this.userRepository
@@ -35,7 +32,6 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    @Override
     @Transactional(readOnly = true)
     public UserDTO getUserById(int id) {
         return userRepository.findById(id)
@@ -43,7 +39,7 @@ public class UserServiceImpl implements UserService {
                 .orElse(null);
     }
 
-    @Override
+    @Transactional
     public UserDTO createUser(UserDTO userDTO) {
         UserEntity user = UserMapper.ISTANCE.userDtoToUser(userDTO);
         UserEntity userAdded = userRepository.save(user);

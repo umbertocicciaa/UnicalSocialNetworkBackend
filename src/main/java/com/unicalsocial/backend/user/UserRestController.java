@@ -1,10 +1,11 @@
 package com.unicalsocial.backend.user;
 
+import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -12,28 +13,32 @@ import java.util.Optional;
 @RequestMapping("${api.endpoint}")
 public class UserRestController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public UserRestController(UserService userService) {
+    public UserRestController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
+    @CrossOrigin
     @GetMapping(value = "/users")
     public ResponseEntity<List<UserDTO>> getUsers() {
         var users = this.userService.getAllUser();
         if (users.isEmpty())
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         return ResponseEntity.ok().body(users);
     }
 
+    @CrossOrigin
     @GetMapping(value = "/users/{id}")
     public ResponseEntity<UserDTO> getUsersById(@PathVariable int id) {
         Optional<UserDTO> userDTO = Optional.ofNullable(userService.getUserById(id));
         return userDTO.map(s -> ResponseEntity.ok().body(s)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @CrossOrigin
     @PostMapping(value = "/users/save")
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
+    @PreAuthorize("hasRole('client_admin')")
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
         try {
             var saved = this.userService.createUser(userDTO);
             return new ResponseEntity<>(saved, HttpStatus.CREATED);

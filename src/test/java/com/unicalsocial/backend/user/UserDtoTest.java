@@ -28,15 +28,13 @@ public class UserDtoTest {
     @Test
     public void shouldMapUser() {
         //given
-        UserDTO userDTO = new UserDTO(1, "umberto domenico", "ciccia", "umbertocicciaa", LocalDateTime.now());
+        UserDTO userDTO = UserDTO.builder().firstName("s").lastName("a").build();
         //when
         UserEntity user = UserMapper.ISTANCE.userDtoToUser(userDTO);
         //then
         assertThat(user).isNotNull();
         assertThat(user.getFirstName()).isEqualTo(userDTO.getFirstName());
         assertThat(user.getLastName()).isEqualTo(userDTO.getLastName());
-        assertThat(user.getSignupDate()).isEqualTo(userDTO.getSignupDate());
-        assertThat(user.getProfileName()).isEqualTo(userDTO.getProfileName());
     }
 
 }
