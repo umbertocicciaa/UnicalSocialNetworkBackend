@@ -27,12 +27,14 @@ public class UserRepositoryTest {
                 .firstName("pippo")
                 .lastName("pippa")
                 .profileName("pippo")
+                .email("pippo@gmail.com")
                 .build();
 
         UserEntity userEntity2 = UserEntity.builder()
                 .firstName("pluto")
                 .lastName("tromba")
                 .profileName("pluto")
+                .email("pluto@gmail.com")
                 .build();
 
         userRepository.save(userEntity1);
@@ -51,6 +53,7 @@ public class UserRepositoryTest {
                 .firstName("pippo")
                 .lastName("pippa")
                 .profileName("pippo")
+                .email("pippo@gmail.com")
                 .build();
         userRepository.save(userEntity1);
         Assertions.assertTrue(userRepository.existsById(userEntity1.getId()));
@@ -62,6 +65,7 @@ public class UserRepositoryTest {
                 .firstName("pippo")
                 .lastName("pippa")
                 .profileName("pippo")
+                .email("pippo@gmail.com")
                 .build();
         UserEntity result = userRepository.save(userEntity1);
         Assertions.assertEquals(userEntity1, result);

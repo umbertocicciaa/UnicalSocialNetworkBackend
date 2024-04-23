@@ -1,6 +1,10 @@
 package com.unicalsocial.backend.user;
 
+import com.unicalsocial.backend.comment.CommentEntity;
+import com.unicalsocial.backend.follower.FollowerEntity;
+import com.unicalsocial.backend.like.LikeEntity;
 import com.unicalsocial.backend.models.*;
+import com.unicalsocial.backend.post.PostEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;

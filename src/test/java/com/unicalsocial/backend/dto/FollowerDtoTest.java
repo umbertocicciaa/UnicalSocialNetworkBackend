@@ -1,6 +1,8 @@
 package com.unicalsocial.backend.dto;
 
-import com.unicalsocial.backend.models.FollowerEntity;
+import com.unicalsocial.backend.follower.FollowerDTO;
+import com.unicalsocial.backend.follower.FollowerMapper;
+import com.unicalsocial.backend.follower.FollowerEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

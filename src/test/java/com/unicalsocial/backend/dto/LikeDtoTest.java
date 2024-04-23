@@ -1,6 +1,8 @@
 package com.unicalsocial.backend.dto;
 
-import com.unicalsocial.backend.models.LikeEntity;
+import com.unicalsocial.backend.like.LikeDTO;
+import com.unicalsocial.backend.like.LikeMapper;
+import com.unicalsocial.backend.like.LikeEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

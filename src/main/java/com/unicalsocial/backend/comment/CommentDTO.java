@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.dto;
+package com.unicalsocial.backend.comment;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,10 +11,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostDTO {
+public class CommentDTO {
     private int id;
     private int createdByUserid;
-    private LocalDateTime createDatetime;
-    private String caption;
-    private int postType;
+    private int postId;
+    private LocalDateTime createdDatetime;
+    private String comment;
+    private Integer commentRepliedToId;
 }

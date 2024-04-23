@@ -1,5 +1,6 @@
 package com.unicalsocial.backend.security;
 
+import com.unicalsocial.backend.user.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
@@ -23,6 +24,12 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
 
     private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter =
             new JwtGrantedAuthoritiesConverter();
+
+    private final UserService userService;
+
+    public JwtAuthConverter(UserService userService) {
+        this.userService = userService;
+    }
 
     @Value("${jwt.auth.converter.principle-attribute}")
     private String principleAttribute;

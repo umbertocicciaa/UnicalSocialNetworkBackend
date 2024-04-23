@@ -1,6 +1,5 @@
-package com.unicalsocial.backend.dto;
+package com.unicalsocial.backend.like;
 
-import com.unicalsocial.backend.models.LikeEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

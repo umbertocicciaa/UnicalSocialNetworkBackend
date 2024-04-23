@@ -13,14 +13,15 @@ import java.util.Optional;
 @RequestMapping("${api.endpoint}")
 public class UserRestController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    public UserRestController(UserServiceImpl userService) {
+    public UserRestController(UserService userService) {
         this.userService = userService;
     }
 
     @CrossOrigin
     @GetMapping(value = "/users")
+    @PreAuthorize("hasRole('client_admin')")
     public ResponseEntity<List<UserDTO>> getUsers() {
         var users = this.userService.getAllUser();
         if (users.isEmpty())
@@ -29,6 +30,7 @@ public class UserRestController {
     }
 
     @CrossOrigin
+    @PreAuthorize("hasRole('client_admin')")
     @GetMapping(value = "/users/{id}")
     public ResponseEntity<UserDTO> getUsersById(@PathVariable int id) {
         Optional<UserDTO> userDTO = Optional.ofNullable(userService.getUserById(id));

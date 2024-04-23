@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.dto;
+package com.unicalsocial.backend.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LikeDTO {
-    private int userId;
-    private int postId;
+public class PostMediaDTO {
+    private Integer id;
+    private PostEntity post;
+    private byte[] mediaFile;
 }

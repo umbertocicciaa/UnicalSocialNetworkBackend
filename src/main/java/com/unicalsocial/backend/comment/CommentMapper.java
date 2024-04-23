@@ -1,6 +1,5 @@
-package com.unicalsocial.backend.dto;
+package com.unicalsocial.backend.comment;
 
-import com.unicalsocial.backend.models.CommentEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

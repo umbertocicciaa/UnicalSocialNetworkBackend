@@ -1,11 +1,11 @@
 package com.unicalsocial.backend.dto;
 
-import com.unicalsocial.backend.models.PostEntity;
-import com.unicalsocial.backend.models.PostTypeEntity;
+import com.unicalsocial.backend.post.PostEntity;
+import com.unicalsocial.backend.post.PostDTO;
+import com.unicalsocial.backend.post.PostMapper;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

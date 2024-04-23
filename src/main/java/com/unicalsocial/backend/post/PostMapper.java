@@ -1,6 +1,5 @@
-package com.unicalsocial.backend.dto;
+package com.unicalsocial.backend.post;
 
-import com.unicalsocial.backend.models.PostEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

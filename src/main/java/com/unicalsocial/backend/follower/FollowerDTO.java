@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.dto;
+package com.unicalsocial.backend.follower;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostTypeDTO {
-    private int id;
-    private String postTypeName;
+public class FollowerDTO {
+    private int followingUserId;
+    private int followerUserId;
 }

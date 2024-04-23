@@ -1,5 +1,7 @@
 package com.unicalsocial.backend.dto;
 
+import com.unicalsocial.backend.message.MessageDTO;
+import com.unicalsocial.backend.message.MessageMapper;
 import com.unicalsocial.backend.models.MessageEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -7,7 +9,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 public class MessageDtoTest {
     @Test

@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.dto;
+package com.unicalsocial.backend.message;
 
 import com.unicalsocial.backend.models.MessageEntity;
 import org.mapstruct.Mapper;

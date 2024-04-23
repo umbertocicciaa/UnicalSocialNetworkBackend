@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.dto;
+package com.unicalsocial.backend.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.models;
+package com.unicalsocial.backend.post;
 
 import jakarta.persistence.*;
 import lombok.Data;

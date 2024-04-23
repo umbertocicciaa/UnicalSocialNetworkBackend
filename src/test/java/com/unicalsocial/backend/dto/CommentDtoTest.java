@@ -1,10 +1,11 @@
 package com.unicalsocial.backend.dto;
 
-import com.unicalsocial.backend.models.CommentEntity;
+import com.unicalsocial.backend.comment.CommentDTO;
+import com.unicalsocial.backend.comment.CommentEntity;
+import com.unicalsocial.backend.comment.CommentMapper;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
