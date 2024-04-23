@@ -1,8 +1,8 @@
 package com.unicalsocial.backend.dto;
 
-import com.unicalsocial.backend.post.PostTypeEntity;
-import com.unicalsocial.backend.post.PostTypeDTO;
-import com.unicalsocial.backend.post.PostTypeMapper;
+import com.unicalsocial.backend.post_type.PostTypeEntity;
+import com.unicalsocial.backend.post_type.PostTypeDTO;
+import com.unicalsocial.backend.post_type.PostTypeMapper;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

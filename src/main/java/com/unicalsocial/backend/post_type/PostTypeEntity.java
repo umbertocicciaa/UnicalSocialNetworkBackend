@@ -1,5 +1,6 @@
-package com.unicalsocial.backend.post;
+package com.unicalsocial.backend.post_type;
 
+import com.unicalsocial.backend.post.PostEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 

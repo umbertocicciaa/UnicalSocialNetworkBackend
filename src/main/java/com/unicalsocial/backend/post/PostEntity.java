@@ -2,6 +2,7 @@ package com.unicalsocial.backend.post;
 
 import com.unicalsocial.backend.comment.CommentEntity;
 import com.unicalsocial.backend.like.LikeEntity;
+import com.unicalsocial.backend.post_type.PostTypeEntity;
 import com.unicalsocial.backend.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;

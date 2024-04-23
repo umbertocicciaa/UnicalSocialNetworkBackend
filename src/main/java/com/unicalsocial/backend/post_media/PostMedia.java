@@ -1,5 +1,6 @@
-package com.unicalsocial.backend.post;
+package com.unicalsocial.backend.post_media;
 
+import com.unicalsocial.backend.post.PostEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
