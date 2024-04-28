@@ -10,13 +10,13 @@ public class UserDtoTest {
     @Test
     public void shouldMapUserDto() {
         //given
-        UserEntity user = new UserEntity();
+        var user = new UserEntity();
         user.setFirstName("umberto domenico");
         user.setLastName("ciccia");
         user.setSignupDate(LocalDateTime.now());
         user.setProfileName("umbertocicciaa");
         //when
-        UserDTO userDTO = UserMapper.ISTANCE.userToUserDto(user);
+        var userDTO = UserMapper.INSTANCE.userToUserDto(user);
         //then
         assertThat(userDTO).isNotNull();
         assertThat(userDTO.getFirstName()).isEqualTo(user.getFirstName());
@@ -28,9 +28,9 @@ public class UserDtoTest {
     @Test
     public void shouldMapUser() {
         //given
-        UserDTO userDTO = UserDTO.builder().firstName("s").lastName("a").build();
+        var userDTO = UserDTO.builder().firstName("s").lastName("a").build();
         //when
-        UserEntity user = UserMapper.ISTANCE.userDtoToUser(userDTO);
+        var user = UserMapper.INSTANCE.userDtoToUser(userDTO);
         //then
         assertThat(user).isNotNull();
         assertThat(user.getFirstName()).isEqualTo(userDTO.getFirstName());

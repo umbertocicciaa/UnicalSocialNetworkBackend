@@ -23,14 +23,14 @@ public class UserRepositoryTest {
 
     @Test
     public void userRepository_getAllUser() {
-        UserEntity userEntity1 = UserEntity.builder()
+        var userEntity1 = UserEntity.builder()
                 .firstName("pippo")
                 .lastName("pippa")
                 .profileName("pippo")
                 .email("pippo@gmail.com")
                 .build();
 
-        UserEntity userEntity2 = UserEntity.builder()
+        var userEntity2 = UserEntity.builder()
                 .firstName("pluto")
                 .lastName("tromba")
                 .profileName("pluto")
@@ -40,7 +40,7 @@ public class UserRepositoryTest {
         userRepository.save(userEntity1);
         userRepository.save(userEntity2);
 
-        List<UserEntity> users = userRepository.findAll();
+        var users = userRepository.findAll();
 
         Assertions.assertEquals(userEntity1, users.getFirst());
         Assertions.assertEquals(userEntity2, users.getLast());
@@ -49,7 +49,7 @@ public class UserRepositoryTest {
 
     @Test
     public void userRepository_getUserById() {
-        UserEntity userEntity1 = UserEntity.builder()
+        var userEntity1 = UserEntity.builder()
                 .firstName("pippo")
                 .lastName("pippa")
                 .profileName("pippo")
@@ -61,13 +61,13 @@ public class UserRepositoryTest {
 
     @Test
     public void userRepository_createUser() {
-        UserEntity userEntity1 = UserEntity.builder()
+        var userEntity1 = UserEntity.builder()
                 .firstName("pippo")
                 .lastName("pippa")
                 .profileName("pippo")
                 .email("pippo@gmail.com")
                 .build();
-        UserEntity result = userRepository.save(userEntity1);
+        var result = userRepository.save(userEntity1);
         Assertions.assertEquals(userEntity1, result);
     }
 }

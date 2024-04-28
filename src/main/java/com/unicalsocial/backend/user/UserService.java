@@ -1,10 +1,12 @@
 package com.unicalsocial.backend.user;
 
+import org.springframework.http.ResponseEntity;
+
 import java.util.List;
 
 public interface UserService {
-    List<UserDTO> getAllUser();
-    List<UserDTO> getAllUserOrderedBySignUpDate(UserDTO userDTO);
-    UserDTO getUserById(int id);
-    UserDTO createUser(UserDTO userDTO);
+    ResponseEntity<List<UserDTO>> getAllUser();
+    ResponseEntity<List<UserDTO>> getAllUserOrderedBySignUpDate();
+    ResponseEntity<UserDTO> getUserById(int id);
+    ResponseEntity<UserDTO> createUser(UserDTO userDTO);
 }

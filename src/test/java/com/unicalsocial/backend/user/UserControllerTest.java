@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -48,13 +50,13 @@ public class UserControllerTest {
                 .lastName("tromba")
                 .profileName("pluto")
                 .build();
-        this.user1 = UserMapper.ISTANCE.userToUserDto(userEntity1);
-        this.user2 = UserMapper.ISTANCE.userToUserDto(userEntity2);
+        this.user1 = UserMapper.INSTANCE.userToUserDto(userEntity1);
+        this.user2 = UserMapper.INSTANCE.userToUserDto(userEntity2);
     }
 
     @Test
     public void getAllUsers() throws Exception {
-        when(userService.getAllUser()).thenReturn(Arrays.asList(user1, user2));
+        when(userService.getAllUser()).thenReturn(ResponseEntity.ok().body(Arrays.asList(user1, user2)));
         ResultActions response = mockMvc.perform(get("/api/v1/users").contentType(MediaType.APPLICATION_JSON));
         response.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(Arrays.asList(user1, user2).size())));
     }
@@ -63,7 +65,7 @@ public class UserControllerTest {
     public void getUserById() throws Exception {
         // Mocking the user id
         int id = 1;
-        when(userService.getUserById(id)).thenReturn(user1);
+        when(userService.getUserById(id)).thenReturn(ResponseEntity.ok().body(user1));
         ResultActions response = mockMvc.perform(get("/api/v1/users/" + id)
                 .contentType(MediaType.APPLICATION_JSON));
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -72,13 +74,11 @@ public class UserControllerTest {
 
     @Test
     public void createUser() throws Exception {
-        when(userService.createUser(user1)).thenReturn(user1);
+        when(userService.createUser(user1)).thenReturn(new ResponseEntity<>(user1, HttpStatus.CREATED));
         ResultActions response = mockMvc.perform(post("/api/v1/users/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(user1)));
-
         response.andExpect(MockMvcResultMatchers.status().isCreated());
-
         response.andExpect(MockMvcResultMatchers.content().json(new ObjectMapper().writeValueAsString(user1)));
     }
 
