@@ -1,6 +1,6 @@
 package com.unicalsocial.backend.models;
 
-import com.unicalsocial.backend.user.User;
+import com.unicalsocial.backend.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -13,20 +13,20 @@ import java.time.Instant;
 @Data
 @Entity
 @Table(name = "group_member")
-public class GroupMember {
+public class GroupMemberEntity {
     @EmbeddedId
-    private GroupMemberId id;
+    private GroupMemberIdEntity id;
 
     @MapsId("conversationId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @ColumnDefault("nextval('group_member_conversation_id_seq'")
     @JoinColumn(name = "conversation_id", nullable = false)
-    private Conversation conversation;
+    private ConversationEntity conversationEntity;
 
     @MapsId("userId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private UserEntity userEntity;
 
     @Column(name = "joined_datetime")
     private Instant joinedDatetime;

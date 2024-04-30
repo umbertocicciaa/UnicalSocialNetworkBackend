@@ -1,6 +1,6 @@
 package com.unicalsocial.backend.message;
 
-import com.unicalsocial.backend.models.Conversation;
+import com.unicalsocial.backend.models.ConversationEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -14,7 +14,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Data
 @Table(name = "message")
-public class Message {
+public class MessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('message_id_seq'")
@@ -24,7 +24,7 @@ public class Message {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "conversation_id", nullable = false)
-    private Conversation conversation;
+    private ConversationEntity conversationEntity;
 
     @Column(name = "sent_datetime")
     private Instant sentDatetime;
