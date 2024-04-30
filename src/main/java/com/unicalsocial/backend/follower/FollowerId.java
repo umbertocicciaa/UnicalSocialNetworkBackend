@@ -1,7 +1,30 @@
-package com.unicalsocial.backend.models;
+package com.unicalsocial.backend.follower;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+import org.hibernate.Hibernate;
+import org.hibernate.annotations.ColumnDefault;
 
-@Entity
-public class FollowerId {
-  }
+import java.io.Serial;
+import java.util.Objects;
+
+@Embeddable
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class FollowerId implements java.io.Serializable {
+    @Serial
+    private static final long serialVersionUID = 9121542656082919003L;
+    @NotNull
+    @ColumnDefault("nextval('follower_follower_user_id_seq'")
+    @Column(name = "follower_user_id", nullable = false)
+    private Integer followerUserId;
+
+    @NotNull
+    @Column(name = "following_user_id", nullable = false)
+    private Integer followingUserId;
+
+}

@@ -6,13 +6,9 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface FollowerMapper {
-    FollowerMapper ISTANCE = Mappers.getMapper(FollowerMapper.class);
+    FollowerMapper INSTANCE = Mappers.getMapper(FollowerMapper.class);
 
-    @Mapping(source = "followingUserId", target = "followingUserId")
-    @Mapping(source = "followerUserId", target = "followerUserId")
     FollowerDTO followerToDto(FollowerEntity follower);
 
-    @Mapping(source = "followingUserId", target = "followingUserId")
-    @Mapping(source = "followerUserId", target = "followerUserId")
     FollowerEntity followerDtoToFollower(FollowerDTO followerDTO);
 }
