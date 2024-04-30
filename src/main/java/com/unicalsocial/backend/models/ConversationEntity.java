@@ -1,23 +1,25 @@
 package com.unicalsocial.backend.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
-import java.util.Collection;
-
-@Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-@Table(name = "conversation", schema = "public", catalog = "unical_social_network")
-public class ConversationEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Entity
+@Table(name = "conversation")
+public class Conversation {
     @Id
-    @Column(name = "conversation_id")
-    private int conversationId;
-    @Basic
-    @Column(name = "conversation_name")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ColumnDefault("nextval('conversation_conversation_id_seq'")
+    @Column(name = "conversation_id", nullable = false)
+    private Integer id;
+
+    @NotNull
+    @Column(name = "conversation_name", nullable = false, length = Integer.MAX_VALUE)
     private String conversationName;
-    @OneToMany(mappedBy = "conversationByConversationId")
-    private Collection<GroupMemberEntity> groupMembersByConversationId;
-    @OneToMany(mappedBy = "conversationByConversationId")
-    private Collection<MessageEntity> messagesByConversationId;
+
 }

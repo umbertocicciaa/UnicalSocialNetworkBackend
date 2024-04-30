@@ -1,6 +1,7 @@
 package com.unicalsocial.backend.user;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -8,14 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("${api.endpoint}")
+@AllArgsConstructor
+@RequestMapping("${api.endpoint}"+"User")
 public class UserRestController {
 
     private final UserService userService;
-
-    public UserRestController(UserService userService) {
-        this.userService = userService;
-    }
 
     @CrossOrigin
     @GetMapping(value = "/users")
@@ -30,7 +28,6 @@ public class UserRestController {
     public ResponseEntity<List<UserDTO>> getUsersOrderedBySignUp() {
         return this.userService.getAllUserOrderedBySignUpDate();
     }
-
 
     @CrossOrigin
     @PreAuthorize("hasRole('client_admin')")

@@ -8,19 +8,8 @@ import org.mapstruct.factory.Mappers;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    @Mapping(source="firstName",target = "firstName")
-    @Mapping(source="lastName",target = "lastName")
-    @Mapping(source="profileName",target = "profileName")
-    @Mapping(source="signupDate",target = "signupDate")
-    @Mapping(source = "email",target = "email")
     UserDTO userToUserDto(UserEntity user);
 
-    @Mapping(source="firstName",target = "firstName")
-    @Mapping(source="lastName",target = "lastName")
-    @Mapping(source="profileName",target = "profileName")
-    @Mapping(source="signupDate",target = "signupDate")
-    @Mapping(source = "email",target = "email")
     UserEntity userDtoToUser(UserDTO userDto);
-
 
 }

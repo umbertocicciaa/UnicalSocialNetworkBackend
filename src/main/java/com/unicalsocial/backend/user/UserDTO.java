@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @NoArgsConstructor
@@ -19,5 +19,6 @@ public class UserDTO {
     private String profileName;
     @Email
     private String email;
-    private LocalDateTime signupDate;
+    private Instant signupDate;
+    private byte[] profilePicture;
 }

@@ -1,45 +1,50 @@
 package com.unicalsocial.backend.post;
 
-import com.unicalsocial.backend.comment.CommentEntity;
-import com.unicalsocial.backend.like.LikeEntity;
-import com.unicalsocial.backend.post_type.PostTypeEntity;
-import com.unicalsocial.backend.user.UserEntity;
+import com.unicalsocial.backend.user.User;
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
+import java.time.Instant;
 
-
-@Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-@Table(name = "post", schema = "public", catalog = "unical_social_network")
-public class PostEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Entity
+@Table(name = "post")
+public class Post {
     @Id
-    @Column(name = "id")
-    private int id;
-    @Basic
-    @Column(name = "created_by_userid",insertable = false,updatable = false)
-    private int createdByUserid;
-    @Basic
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ColumnDefault("nextval('post_id_seq'")
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "created_by_userid", nullable = false)
+    private User createdByUserid;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "post_type", nullable = false)
+    private PostType postType;
+
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "create_datetime")
-    private LocalDateTime createDatetime;
-    @Basic
-    @Column(name = "caption")
+    private Instant createDatetime;
+
+    @NotNull
+    @Column(name = "caption", nullable = false, length = Integer.MAX_VALUE)
     private String caption;
-    @Basic
-    @Column(name = "post_type",insertable = false,updatable = false)
-    private int postType;
-    @OneToMany(mappedBy = "postByPostId")
-    private Collection<CommentEntity> commentsById;
-    @OneToMany(mappedBy = "postByPostId")
-    private Collection<LikeEntity> likesById;
-    @ManyToOne
-    @JoinColumn(name = "created_by_userid", referencedColumnName = "id", nullable = false)
-    private UserEntity userByCreatedByUserid;
-    @ManyToOne
-    @JoinColumn(name = "post_type", referencedColumnName = "id", nullable = false)
-    private PostTypeEntity postTypeByPostType;
+
+    @NotNull
+    @Column(name = "\"like\"", nullable = false)
+    private Integer like;
+
+    @NotNull
+    @Column(name = "version", nullable = false)
+    private Integer version;
 
 }

@@ -1,34 +1,37 @@
 package com.unicalsocial.backend.models;
 
-import com.unicalsocial.backend.user.UserEntity;
+import com.unicalsocial.backend.user.User;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-@Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-@Table(name = "group_member", schema = "public", catalog = "unical_social_network")
-@IdClass(GroupMemberEntityPK.class)
-public class GroupMemberEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "user_id")
-    private int userId;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "conversation_id")
-    private int conversationId;
-    @Basic
+@Entity
+@Table(name = "group_member")
+public class GroupMember {
+    @EmbeddedId
+    private GroupMemberId id;
+
+    @MapsId("conversationId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ColumnDefault("nextval('group_member_conversation_id_seq'")
+    @JoinColumn(name = "conversation_id", nullable = false)
+    private Conversation conversation;
+
+    @MapsId("userId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     @Column(name = "joined_datetime")
-    private LocalDateTime joinedDatetime;
-    @Basic
+    private Instant joinedDatetime;
+
     @Column(name = "left_datetime")
-    private LocalDateTime leftDatetime;
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private UserEntity userByUserId;
-    @ManyToOne
-    @JoinColumn(name = "conversation_id", referencedColumnName = "conversation_id", nullable = false)
-    private ConversationEntity conversationByConversationId;
+    private Instant leftDatetime;
+
 }

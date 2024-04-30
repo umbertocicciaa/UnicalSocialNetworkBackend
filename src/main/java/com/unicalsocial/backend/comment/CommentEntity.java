@@ -1,45 +1,47 @@
 package com.unicalsocial.backend.comment;
 
-import com.unicalsocial.backend.post.PostEntity;
-import com.unicalsocial.backend.user.UserEntity;
+import com.unicalsocial.backend.post.Post;
+import com.unicalsocial.backend.user.User;
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
-import java.time.LocalDateTime;
-import java.util.Collection;
+import java.time.Instant;
 
 @Entity
+@Table(name = "comment")
 @Data
-@Table(name = "comment", schema = "public", catalog = "unical_social_network")
-public class CommentEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class Comment {
     @Id
-    @Column(name = "id")
-    private int id;
-    @Basic
-    @Column(name = "created_by_userid",insertable = false,updatable = false)
-    private int createdByUserid;
-    @Basic
-    @Column(name = "post_id",insertable = false,updatable = false)
-    private int postId;
-    @Basic
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ColumnDefault("nextval('comment_id_seq'")
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_replied_to_id")
+    private Comment commentRepliedTo;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "created_by_userid", nullable = false)
+    private User createdByUserid;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
+
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_datetime")
-    private LocalDateTime createdDatetime;
-    @Basic
-    @Column(name = "comment")
+    private Instant createdDatetime;
+
+    @NotNull
+    @Column(name = "comment", nullable = false, length = Integer.MAX_VALUE)
     private String comment;
-    @Basic
-    @Column(name = "comment_replied_to_id",insertable = false,updatable = false)
-    private Integer commentRepliedToId;
-    @ManyToOne
-    @JoinColumn(name = "created_by_userid", referencedColumnName = "id", nullable = false)
-    private UserEntity userByCreatedByUserid;
-    @ManyToOne
-    @JoinColumn(name = "post_id", referencedColumnName = "id", nullable = false)
-    private PostEntity postByPostId;
-    @ManyToOne
-    @JoinColumn(name = "comment_replied_to_id", referencedColumnName = "id")
-    private CommentEntity commentByCommentRepliedToId;
-    @OneToMany(mappedBy = "commentByCommentRepliedToId")
-    private Collection<CommentEntity> commentsById;
+
 }

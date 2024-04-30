@@ -2,18 +2,18 @@ package com.unicalsocial.backend.user;
 
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserDtoTest {
+public class UserEntityDtoTest {
     @Test
     public void shouldMapUserDto() {
         //given
         var user = new UserEntity();
         user.setFirstName("umberto domenico");
         user.setLastName("ciccia");
-        user.setSignupDate(LocalDateTime.now());
+        user.setSignupDate(Instant.now());
         user.setProfileName("umbertocicciaa");
         //when
         var userDTO = UserMapper.INSTANCE.userToUserDto(user);

@@ -1,26 +1,29 @@
 package com.unicalsocial.backend.follower;
 
-import com.unicalsocial.backend.user.UserEntity;
+import com.unicalsocial.backend.user.User;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
+@Table(name = "follower")
 @Data
-@Table(name = "follower", schema = "public", catalog = "unical_social_network")
-@IdClass(FollowerEntityPK.class)
-public class FollowerEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "following_user_id")
-    private int followingUserId;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "follower_user_id")
-    private int followerUserId;
-    @ManyToOne
-    @JoinColumn(name = "following_user_id", referencedColumnName = "id", nullable = false)
-    private UserEntity userByFollowingUserId;
-    @ManyToOne
-    @JoinColumn(name = "follower_user_id", referencedColumnName = "id", nullable = false)
-    private UserEntity userByFollowerUserId;
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Follower {
+    @EmbeddedId
+    private FollowerId id;
+
+    @MapsId("followerUserId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ColumnDefault("nextval('follower_follower_user_id_seq'")
+    @JoinColumn(name = "follower_user_id", nullable = false)
+    private User followerUser;
+
+    @MapsId("followingUserId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "following_user_id", nullable = false)
+    private User followingUser;
+
 }

@@ -1,55 +1,45 @@
 package com.unicalsocial.backend.user;
 
-import com.unicalsocial.backend.comment.CommentEntity;
-import com.unicalsocial.backend.follower.FollowerEntity;
-import com.unicalsocial.backend.like.LikeEntity;
-import com.unicalsocial.backend.models.*;
-import com.unicalsocial.backend.post.PostEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.time.LocalDateTime;
-import java.util.Collection;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
-@Entity
-@Data
-@Table(name = "user", schema = "public", catalog = "unical_social_network")
-@NoArgsConstructor
-@AllArgsConstructor
+import java.time.Instant;
+
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+@Entity
+@Table(name = "\"user\"")
 public class UserEntity {
-    @Basic
-    @Column(name = "first_name")
-    private String firstName;
-    @Basic
-    @Column(name = "last_name")
-    private String lastName;
-    @Basic
-    @Column(name = "profile_name")
-    private String profileName;
-    @Basic
-    @Column(name = "signup_date")
-    private LocalDateTime signupDate;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id")
-    private int id;
-    @Column(unique = true)
-    @Email
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ColumnDefault("nextval('user_id_seq'")
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Column(name = "signup_date")
+    private Instant signupDate;
+
+    @NotNull
+    @Column(name = "email", nullable = false, length = Integer.MAX_VALUE)
     private String email;
-    @OneToMany(mappedBy = "userByCreatedByUserid")
-    private Collection<CommentEntity> commentsById;
-    @OneToMany(mappedBy = "userByFollowingUserId")
-    private Collection<FollowerEntity> followersById;
-    @OneToMany(mappedBy = "userByFollowerUserId")
-    private Collection<FollowerEntity> followersById_0;
-    @OneToMany(mappedBy = "userByUserId")
-    private Collection<GroupMemberEntity> groupMembersById;
-    @OneToMany(mappedBy = "userByUserId")
-    private Collection<LikeEntity> likesById;
-    @OneToMany(mappedBy = "userByCreatedByUserid")
-    private Collection<PostEntity> postsById;
+
+    @NotNull
+    @Column(name = "first_name", nullable = false, length = Integer.MAX_VALUE)
+    private String firstName;
+
+    @NotNull
+    @Column(name = "last_name", nullable = false, length = Integer.MAX_VALUE)
+    private String lastName;
+
+    @NotNull
+    @Column(name = "profile_name", nullable = false, length = Integer.MAX_VALUE)
+    private String profileName;
+
+    @Column(name = "profile_picture")
+    private byte[] profilePicture;
+
 }
