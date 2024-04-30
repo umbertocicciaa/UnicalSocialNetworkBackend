@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.post_media;
+package com.unicalsocial.backend.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PostMediaDTO {
     private Integer id;
-    private PostEntity post;
+    private PostDTO postEntity;
     private byte[] mediaFile;
 }

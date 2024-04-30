@@ -1,13 +1,14 @@
-package com.unicalsocial.backend.post_media;
+package com.unicalsocial.backend.post;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface PostMediaMapper {
-    PostMediaMapper ISTANCE = Mappers.getMapper(PostMediaMapper.class);
 
-    PostMediaDTO postMediaToPostMediaDTO(PostMedia postMedia);
+    PostMediaMapper INSTANCE = Mappers.getMapper(PostMediaMapper.class);
 
-    PostMedia postMediaDTOToPostMedia(PostMediaDTO postMediaDTO);
+    PostMediaDTO postMediaToPostMediaDTO(PostMediaEntity postMedia);
+
+    PostMediaEntity postMediaDTOToPostMedia(PostMediaDTO postMediaDTO);
 }

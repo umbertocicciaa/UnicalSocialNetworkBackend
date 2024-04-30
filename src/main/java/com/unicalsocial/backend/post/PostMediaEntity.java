@@ -11,7 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Data
 @Entity
 @Table(name = "post_media")
-public class PostMedia {
+public class PostMediaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('post_media_id_seq'")
@@ -21,7 +21,7 @@ public class PostMedia {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+    private PostEntity postEntity;
 
     @NotNull
     @Column(name = "media_file", nullable = false)

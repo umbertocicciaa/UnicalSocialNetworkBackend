@@ -1,6 +1,6 @@
 package com.unicalsocial.backend.post;
 
-import com.unicalsocial.backend.user.User;
+import com.unicalsocial.backend.user.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -14,7 +14,7 @@ import java.time.Instant;
 @Data
 @Entity
 @Table(name = "post")
-public class Post {
+public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('post_id_seq'")
@@ -24,12 +24,12 @@ public class Post {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "created_by_userid", nullable = false)
-    private User createdByUserid;
+    private UserEntity createdByUserid;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "post_type", nullable = false)
-    private PostType postType;
+    private PostTypeEntity postTypeEntity;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "create_datetime")
@@ -44,7 +44,8 @@ public class Post {
     private Integer like;
 
     @NotNull
-    @Column(name = "version", nullable = false)
+    @Column(name = "version")
+    @Version
     private Integer version;
 
 }

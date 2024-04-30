@@ -12,7 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Data
 @Entity
 @Table(name = "post_type")
-public class PostType {
+public class PostTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('post_type_id_seq'")

@@ -1,10 +1,13 @@
 package com.unicalsocial.backend.post;
 
+import com.unicalsocial.backend.user.UserDTO;
+import com.unicalsocial.backend.user.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Data
@@ -12,9 +15,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class PostDTO {
-    private int id;
-    private int createdByUserid;
-    private LocalDateTime createDatetime;
+    private Integer id;
+    private UserDTO createdByUserid;
+    private PostTypeDTO postTypeEntity;
+    private Instant createDatetime;
     private String caption;
-    private int postType;
+    private Integer like;
 }

@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.post_type;
+package com.unicalsocial.backend.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class PostTypeDTO {
-    private int id;
+    private Integer id;
     private String postTypeName;
 }
