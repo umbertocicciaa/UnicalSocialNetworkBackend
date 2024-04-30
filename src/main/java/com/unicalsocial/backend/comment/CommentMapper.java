@@ -6,20 +6,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface CommentMapper {
-    CommentMapper ISTANCE = Mappers.getMapper(CommentMapper.class);
-
-    @Mapping(source = "createdByUserid", target = "createdByUserid")
-    @Mapping(source = "postId", target = "postId")
-    @Mapping(source = "createdDatetime", target = "createdDatetime")
-    @Mapping(source = "comment", target = "comment")
-    @Mapping(source = "commentRepliedToId", target = "commentRepliedToId")
+    CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
     CommentDTO commentToCommentDto(CommentEntity comment);
-
-    @Mapping(source = "createdByUserid", target = "createdByUserid")
-    @Mapping(source = "postId", target = "postId")
-    @Mapping(source = "createdDatetime", target = "createdDatetime")
-    @Mapping(source = "comment", target = "comment")
-    @Mapping(source = "commentRepliedToId", target = "commentRepliedToId")
     CommentEntity commenDtotToComment(CommentDTO comment);
-
 }

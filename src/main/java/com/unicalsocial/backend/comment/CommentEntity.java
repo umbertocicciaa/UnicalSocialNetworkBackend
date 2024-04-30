@@ -1,7 +1,7 @@
 package com.unicalsocial.backend.comment;
 
-import com.unicalsocial.backend.post.Post;
-import com.unicalsocial.backend.user.User;
+import com.unicalsocial.backend.post.PostEntity;
+import com.unicalsocial.backend.user.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -15,7 +15,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Comment {
+public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('comment_id_seq'")
@@ -24,17 +24,17 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_replied_to_id")
-    private Comment commentRepliedTo;
+    private CommentEntity commentEntityRepliedTo;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "created_by_userid", nullable = false)
-    private User createdByUserid;
+    private UserEntity createdByUserid;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "post_id", nullable = false)
-    private Post post;
+    private PostEntity postEntity;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_datetime")
