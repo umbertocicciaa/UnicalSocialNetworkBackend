@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 @AllArgsConstructor
@@ -18,14 +18,14 @@ public class UserRestController {
     @CrossOrigin
     @GetMapping(value = "/users")
     @PreAuthorize("hasRole('client_admin')")
-    public ResponseEntity<List<UserDTO>> getUsers() {
+    public ResponseEntity<Collection<UserDTO>> getUsers() {
         return this.userService.getAllUser();
     }
 
     @CrossOrigin
     @GetMapping(value = "/usersOrdered")
     @PreAuthorize("hasRole('client_admin')")
-    public ResponseEntity<List<UserDTO>> getUsersOrderedBySignUp() {
+    public ResponseEntity<Collection<UserDTO>> getUsersOrderedBySignUp() {
         return this.userService.getAllUserOrderedBySignUpDate();
     }
 

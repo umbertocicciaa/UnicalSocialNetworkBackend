@@ -47,8 +47,6 @@ public class UserEntityServiceTest {
         when(userRepository.findAll()).thenReturn(List.of(UserMapper.INSTANCE.userDtoToUser(user1), UserMapper.INSTANCE.userDtoToUser(user2)));
         var users = userService.getAllUser();
         Assertions.assertEquals(2, Objects.requireNonNull(users.getBody()).size());
-        Assertions.assertEquals(user1.getProfileName(), users.getBody().getFirst().getProfileName());
-        Assertions.assertEquals(user2.getProfileName(), users.getBody().getLast().getProfileName());
     }
 
     @Test
