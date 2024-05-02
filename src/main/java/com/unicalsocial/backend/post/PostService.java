@@ -3,7 +3,7 @@ package com.unicalsocial.backend.post;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Collection;
 
 @Transactional
 public interface PostService {
@@ -11,5 +11,5 @@ public interface PostService {
     ResponseEntity<PostDTO>getPostById(Long id);
     ResponseEntity<PostDTO>updatePost(PostDTO postDTO);
     ResponseEntity<PostDTO>deletePost(PostDTO postDTO);
-    ResponseEntity<List<PostDTO>>getPostOrderedByDateDesc();
+    ResponseEntity<Collection<PostDTO>>getPostOrderedByDateDesc();
 }

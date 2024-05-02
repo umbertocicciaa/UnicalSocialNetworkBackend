@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 
 @Service
 @Transactional
@@ -36,10 +38,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<List<PostDTO>> getPostOrderedByDateDesc() {
+    public ResponseEntity<Collection<PostDTO>> getPostOrderedByDateDesc() {
         var post = this.postRepository.findAllByOrderByCreateDatetimeDesc();
         if(post.isEmpty())
             return ResponseEntity.noContent().build();
-        return ResponseEntity.ok().body(post.stream().map(PostMapper.INSTANCE::postToDto).toList());
+        return ResponseEntity.ok().body(post.stream().map(PostMapper.INSTANCE::postToDto).collect(Collectors.toList()));
     }
 }

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Collection;
 
 @RestController
 @AllArgsConstructor
@@ -16,7 +16,7 @@ public class PostRestController {
 
     @CrossOrigin
     @GetMapping(value = "/posts")
-    public ResponseEntity<List<PostDTO>> getPosts(){
+    public ResponseEntity<Collection<PostDTO>> getPosts(){
         return this.postService.getPostOrderedByDateDesc();
     }
 
