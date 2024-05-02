@@ -1,6 +1,6 @@
 package com.unicalsocial.backend.follower;
 
-import com.unicalsocial.backend.user.UserEntity;
+import com.unicalsocial.backend.user.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class FollowerDTO {
-    private UserEntity followerUserEntity;
-    private UserEntity followingUserEntity;
+    private UserDTO followerUserEntity;
+    private UserDTO followingUserEntity;
 }

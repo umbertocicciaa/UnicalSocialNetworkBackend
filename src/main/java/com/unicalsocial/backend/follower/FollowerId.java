@@ -18,8 +18,8 @@ import java.util.Objects;
 public class FollowerId implements java.io.Serializable {
     @Serial
     private static final long serialVersionUID = 9121542656082919003L;
+
     @NotNull
-    @ColumnDefault("nextval('follower_follower_user_id_seq'")
     @Column(name = "follower_user_id", nullable = false)
     private Integer followerUserId;
 

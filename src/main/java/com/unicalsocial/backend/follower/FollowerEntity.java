@@ -17,7 +17,6 @@ public class FollowerEntity {
 
     @MapsId("followerUserId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @ColumnDefault("nextval('follower_follower_user_id_seq'")
     @JoinColumn(name = "follower_user_id", nullable = false)
     private UserEntity followerUserEntity;
 
