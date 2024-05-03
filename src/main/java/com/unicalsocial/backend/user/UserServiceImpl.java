@@ -34,8 +34,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<UserDTO> getUserById(int id) {
-        var user = this.userRepository.findById(id).orElse(null);
+    public ResponseEntity<UserDTO> getUserById(long id) {
+        var user = this.userRepository.findById((int) id).orElse(null);
         if(user == null)
             return ResponseEntity.notFound().build();
         return  ResponseEntity.ok().body(UserMapper.INSTANCE.userToUserDto(user));
@@ -51,4 +51,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<UserDTO> getUserByUsername(String username) {
+       var user = this.userRepository.findByProfileName(username);
+       if(user == null)
+           return ResponseEntity.notFound().build();
+       return ResponseEntity.ok().body(UserMapper.INSTANCE.userToUserDto(user));
+    }
 }

@@ -26,5 +26,10 @@ public class PostRestController {
         return this.postService.getPostById(id);
     }
 
+    @CrossOrigin
+    @GetMapping(value = "/posts/countPost/{user_id}")
+    public ResponseEntity<Long> countPostsByUserId(@PathVariable long user_id){
+        return this.postService.countPostByUserId(user_id);
+    }
 
 }

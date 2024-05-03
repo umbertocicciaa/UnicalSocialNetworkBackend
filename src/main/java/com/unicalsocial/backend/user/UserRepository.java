@@ -2,9 +2,10 @@ package com.unicalsocial.backend.user;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import java.util.Collection;
 
 
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
-    List<UserEntity> findAllByOrderBySignupDateAsc();
+    Collection<UserEntity> findAllByOrderBySignupDateAsc();
+    UserEntity findByProfileName(String username);
 }

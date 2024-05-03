@@ -42,4 +42,10 @@ public class UserRestController {
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
         return this.userService.createUser(userDTO);
     }
+
+    @CrossOrigin
+    @GetMapping(value = "/users_username/{username}")
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
+        return this.userService.getUserByUsername(username);
+    }
 }

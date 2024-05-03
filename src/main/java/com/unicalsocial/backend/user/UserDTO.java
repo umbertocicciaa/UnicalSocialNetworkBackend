@@ -21,4 +21,5 @@ public class UserDTO {
     private String email;
     private Instant signupDate;
     private byte[] profilePicture;
+    private String bio;
 }

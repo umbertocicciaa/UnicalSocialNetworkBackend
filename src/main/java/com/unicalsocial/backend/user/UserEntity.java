@@ -42,4 +42,7 @@ public class UserEntity {
     @Column(name = "profile_picture")
     private byte[] profilePicture;
 
+    @Column(name = "bio")
+    private String bio;
+
 }
