@@ -10,6 +10,6 @@ public interface PostService {
     ResponseEntity<PostDTO>getPostById(Long id);
     ResponseEntity<PostDTO>updatePost(PostDTO postDTO);
     ResponseEntity<PostDTO>deletePost(PostDTO postDTO);
-    ResponseEntity<Collection<PostDTO>>getPostOrderedByDateDesc();
+    ResponseEntity<Collection<PostDTO>>getPostOrderedByDateDesc(int page, int size);
     ResponseEntity<Long> countPostByUserId(long userId);
 }

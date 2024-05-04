@@ -16,8 +16,9 @@ public class PostRestController {
 
     @CrossOrigin
     @GetMapping(value = "/posts")
-    public ResponseEntity<Collection<PostDTO>> getPosts(){
-        return this.postService.getPostOrderedByDateDesc();
+    public ResponseEntity<Collection<PostDTO>> getPosts(@RequestParam(defaultValue = "0") int page){
+        var size = 10;
+        return this.postService.getPostOrderedByDateDesc(page,size);
     }
 
     @CrossOrigin

@@ -3,6 +3,7 @@ package com.unicalsocial.backend.post;
 import com.unicalsocial.backend.user.UserMapper;
 import com.unicalsocial.backend.user.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,8 +42,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Collection<PostDTO>> getPostOrderedByDateDesc() {
-        var post = this.postRepository.findAllByOrderByCreateDatetimeDesc();
+    public ResponseEntity<Collection<PostDTO>> getPostOrderedByDateDesc(int page, int size) {
+        var pageable = PageRequest.of(page, size);
+        var post = this.postRepository.findAllByOrderByCreateDatetimeDesc(pageable);
         if (post.isEmpty())
             return ResponseEntity.noContent().build();
         return ResponseEntity.ok().body(post.stream().map(PostMapper.INSTANCE::postToDto).collect(Collectors.toList()));
