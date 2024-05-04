@@ -1,5 +1,6 @@
 package com.unicalsocial.backend.user;
 
+import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +11,9 @@ import java.util.Collection;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Transactional(readOnly = true)
     public ResponseEntity<Collection<UserDTO>> getAllUser() {
@@ -58,5 +56,14 @@ public class UserServiceImpl implements UserService {
        if(user == null)
            return ResponseEntity.notFound().build();
        return ResponseEntity.ok().body(UserMapper.INSTANCE.userToUserDto(user));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ResponseEntity<Collection<UserDTO>> getUserLikeUsername(String username) {
+        var users = this.userRepository.findAllByProfileNameContainingOrderedByFollowerCount(username);
+        if(users.isEmpty())
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().body(users.stream().map(UserMapper.INSTANCE::userToUserDto).toList());
     }
 }

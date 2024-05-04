@@ -48,4 +48,11 @@ public class UserRestController {
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
         return this.userService.getUserByUsername(username);
     }
+
+    @CrossOrigin
+    @GetMapping(value = "/users_username")
+    public ResponseEntity<Collection<UserDTO>> getUserLikeUsername(@RequestParam("username") String username) {
+        return this.userService.getUserLikeUsername(username);
+    }
+
 }
