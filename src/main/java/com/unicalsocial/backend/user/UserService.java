@@ -10,5 +10,5 @@ public interface UserService {
     ResponseEntity<UserDTO> getUserById(long id);
     ResponseEntity<UserDTO> createUser(UserDTO userDTO);
     ResponseEntity<UserDTO> getUserByUsername(String username);
-    ResponseEntity<Collection<UserDTO>> getUserLikeUsername(String username);
+    ResponseEntity<Collection<UserDTO>> getUserLikeUsername(String username,int page);
 }

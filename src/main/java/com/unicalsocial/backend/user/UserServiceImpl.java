@@ -60,8 +60,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<Collection<UserDTO>> getUserLikeUsername(String username) {
-        var users = this.userRepository.findAllByProfileNameContainingOrderedByFollowerCount(username);
+    public ResponseEntity<Collection<UserDTO>> getUserLikeUsername(String username,int page) {
+        final var  pageSize = 10;
+        final var offset = (page) * pageSize;
+        var users = this.userRepository.findAllByProfileNameContainingOrderedByFollowerCount(username, pageSize, offset);
         if(users.isEmpty())
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok().body(users.stream().map(UserMapper.INSTANCE::userToUserDto).toList());

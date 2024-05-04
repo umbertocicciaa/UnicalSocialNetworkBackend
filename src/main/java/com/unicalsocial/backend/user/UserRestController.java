@@ -51,8 +51,8 @@ public class UserRestController {
 
     @CrossOrigin
     @GetMapping(value = "/users_username")
-    public ResponseEntity<Collection<UserDTO>> getUserLikeUsername(@RequestParam("username") String username) {
-        return this.userService.getUserLikeUsername(username);
+    public ResponseEntity<Collection<UserDTO>> getUserLikeUsername(@RequestParam("username") String username, @RequestParam(defaultValue = "0")int page) {
+        return this.userService.getUserLikeUsername(username,page);
     }
 
 }

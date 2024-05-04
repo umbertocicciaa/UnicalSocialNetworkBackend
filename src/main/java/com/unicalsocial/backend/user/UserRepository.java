@@ -15,8 +15,13 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
             "LEFT JOIN follower f ON u.id = f.follower_user_id " +
             "WHERE u.profile_name LIKE %:partialName% " +
             "GROUP BY u.id " +
-            "ORDER BY follower_count DESC", nativeQuery = true)
-    Collection<UserEntity> findAllByProfileNameContainingOrderedByFollowerCount(@Param("partialName") String partialName);
+            "ORDER BY follower_count DESC " +
+            "LIMIT :pageSize OFFSET :offset", nativeQuery = true)
+    Collection<UserEntity> findAllByProfileNameContainingOrderedByFollowerCount(
+            @Param("partialName") String partialName,
+            @Param("pageSize") int pageSize,
+            @Param("offset") int offset
+    );
 
     UserEntity findByProfileName(String username);
 }
