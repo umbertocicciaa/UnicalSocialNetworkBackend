@@ -47,7 +47,7 @@ public class PostRestController {
 
     @CrossOrigin
     @GetMapping(value = "/posts/getTotal")
-    public ResponseEntity<Long> getPostsOfTypeTwit(){
+    public ResponseEntity<Long> getPostsTotal(){
         return this.postService.countAllPost();
     }
 

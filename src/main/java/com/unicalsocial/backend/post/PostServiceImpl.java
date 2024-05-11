@@ -83,6 +83,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseEntity<Long> countAllPost() {
         var numberOfPosts = this.postRepository.count();
         return ResponseEntity.ok().body(numberOfPosts);
