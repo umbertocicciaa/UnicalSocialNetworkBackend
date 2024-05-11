@@ -44,6 +44,12 @@ public class UserRestController {
     }
 
     @CrossOrigin
+    @GetMapping(value = "/users/getTotal")
+    public ResponseEntity<Long> getTotalUsers(@RequestParam("username")String username) {
+        return this.userService.countAllUsersLikeUsername(username);
+    }
+
+    @CrossOrigin
     @GetMapping(value = "/users_username/{username}")
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
         return this.userService.getUserByUsername(username);

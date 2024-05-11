@@ -68,4 +68,9 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok().body(users.stream().map(UserMapper.INSTANCE::userToUserDto).toList());
     }
+
+    @Override
+    public ResponseEntity<Long> countAllUsersLikeUsername(String username) {
+        return ResponseEntity.ok().body(this.userRepository.countUsersByProfileNameContaining(username));
+    }
 }
