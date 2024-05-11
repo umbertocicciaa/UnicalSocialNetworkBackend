@@ -10,6 +10,9 @@ public interface PostService {
     ResponseEntity<PostDTO>getPostById(Long id);
     ResponseEntity<PostDTO>updatePost(PostDTO postDTO);
     ResponseEntity<PostDTO>deletePost(PostDTO postDTO);
-    ResponseEntity<Collection<PostDTO>>getPostOrderedByDateDesc(int page, int size);
+    ResponseEntity<Collection<PostDTO>>getPostOrderedByDateDesc(int page);
     ResponseEntity<Long> countPostByUserId(long userId);
+    ResponseEntity<Collection<PostDTO>> getPostOfTypePostByUserId(int page,int user_id);
+    ResponseEntity<Collection<PostDTO>> getPostsOfTypeTwitByUserId(int page,int user_id);
+    ResponseEntity<Long>countAllPost();
 }

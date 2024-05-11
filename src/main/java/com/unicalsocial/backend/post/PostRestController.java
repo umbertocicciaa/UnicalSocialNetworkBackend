@@ -17,8 +17,7 @@ public class PostRestController {
     @CrossOrigin
     @GetMapping(value = "/posts")
     public ResponseEntity<Collection<PostDTO>> getPosts(@RequestParam(defaultValue = "0") int page){
-        var size = 10;
-        return this.postService.getPostOrderedByDateDesc(page,size);
+        return this.postService.getPostOrderedByDateDesc(page);
     }
 
     @CrossOrigin
@@ -31,6 +30,25 @@ public class PostRestController {
     @GetMapping(value = "/posts/countPost/{user_id}")
     public ResponseEntity<Long> countPostsByUserId(@PathVariable long user_id){
         return this.postService.countPostByUserId(user_id);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/posts/post")
+    public ResponseEntity<Collection<PostDTO>> getPostsOfTypePost(@RequestParam(defaultValue = "0") int page, @RequestParam int user_id){
+        return this.postService.getPostOfTypePostByUserId(page,user_id);
+    }
+
+
+    @CrossOrigin
+    @GetMapping(value = "/posts/twit")
+    public ResponseEntity<Collection<PostDTO>> getPostsOfTypeTwit(@RequestParam(defaultValue = "0") int page, @RequestParam int user_id){
+        return this.postService.getPostsOfTypeTwitByUserId(page,user_id);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/posts/getTotal")
+    public ResponseEntity<Long> getPostsOfTypeTwit(){
+        return this.postService.countAllPost();
     }
 
 }

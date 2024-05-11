@@ -9,5 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PostRepository extends JpaRepository<PostEntity,Integer> {
     Slice<PostEntity> findAllByOrderByCreateDatetimeDesc(Pageable pageable);
+    Slice<PostEntity> findAllByPostTypeEntityAndCreatedByUseridOrderByCreateDatetimeDesc(@NotNull PostTypeEntity postTypeEntity, @NotNull UserEntity createdByUserid, Pageable pageable);
     Long countByCreatedByUserid(@NotNull UserEntity createdByUserid);
 }
