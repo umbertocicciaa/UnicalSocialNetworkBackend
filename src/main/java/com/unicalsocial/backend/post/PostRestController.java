@@ -2,7 +2,9 @@ package com.unicalsocial.backend.post;
 
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -49,6 +51,23 @@ public class PostRestController {
     @GetMapping(value = "/posts/getTotal")
     public ResponseEntity<Long> getPostsTotal(){
         return this.postService.countAllPost();
+    }
+
+    @CrossOrigin
+    @PutMapping(value = "/posts/{id}/addLike")
+    public ResponseEntity<PostDTO> addLike(@PathVariable long id){
+        var remainingRetries = 3;
+        while (remainingRetries > 0) {
+            try {
+                return this.postService.addLike(id);
+            } catch (ObjectOptimisticLockingFailureException e) {
+                remainingRetries--;
+                if (remainingRetries == 0) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                }
+            }
+        }
+        return ResponseEntity.internalServerError().build();
     }
 
 }

@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OptimisticLockType;
+import org.hibernate.annotations.OptimisticLocking;
 
 import java.time.Instant;
 
@@ -13,6 +15,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Data
 @Entity
+@OptimisticLocking(type=OptimisticLockType.VERSION)
 @Table(name = "post")
 public class PostEntity {
     @Id
@@ -45,6 +48,7 @@ public class PostEntity {
 
     @NotNull
     @Column(name = "version")
+    @ColumnDefault("0")
     @Version
     private Integer version;
 

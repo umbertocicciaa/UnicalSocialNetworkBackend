@@ -15,4 +15,5 @@ public interface PostService {
     ResponseEntity<Collection<PostDTO>> getPostOfTypePostByUserId(int page,int user_id);
     ResponseEntity<Collection<PostDTO>> getPostsOfTypeTwitByUserId(int page,int user_id);
     ResponseEntity<Long>countAllPost();
+    ResponseEntity<PostDTO> addLike(long postId);
 }
