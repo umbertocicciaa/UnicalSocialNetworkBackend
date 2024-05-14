@@ -7,7 +7,10 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "follower")
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

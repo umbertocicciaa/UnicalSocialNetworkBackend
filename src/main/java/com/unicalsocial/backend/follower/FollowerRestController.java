@@ -21,4 +21,16 @@ public class FollowerRestController {
     ResponseEntity<Long> countFollowing(@PathVariable int user_id) {
         return this.followerService.countFollowing(user_id);
     }
+
+    @CrossOrigin
+    @PostMapping(value = "/follow/{user}/{userToFollow}")
+    ResponseEntity<FollowerDTO> follow(@PathVariable int user, @PathVariable int userToFollow) {
+        return this.followerService.followUser(user,userToFollow);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/following/{user}/{userToFollow}")
+    ResponseEntity<Boolean> isFollowing(@PathVariable int user, @PathVariable int userToFollow) {
+        return this.followerService.isFollowing(user,userToFollow);
+    }
 }
