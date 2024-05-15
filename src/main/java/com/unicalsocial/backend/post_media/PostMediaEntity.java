@@ -1,5 +1,6 @@
-package com.unicalsocial.backend.post;
+package com.unicalsocial.backend.post_media;
 
+import com.unicalsocial.backend.post.PostEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -8,7 +9,10 @@ import org.hibernate.annotations.ColumnDefault;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 @Entity
 @Table(name = "post_media")
 public class PostMediaEntity {

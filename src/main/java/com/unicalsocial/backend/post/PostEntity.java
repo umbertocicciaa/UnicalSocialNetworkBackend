@@ -1,5 +1,6 @@
 package com.unicalsocial.backend.post;
 
+import com.unicalsocial.backend.post_type.PostTypeEntity;
 import com.unicalsocial.backend.user.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -13,10 +14,13 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
 @OptimisticLocking(type=OptimisticLockType.VERSION)
 @Table(name = "post")
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

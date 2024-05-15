@@ -1,19 +1,19 @@
 package com.unicalsocial.backend.post;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+import com.unicalsocial.backend.post_media.PostMediaDTO;
 
 import java.util.Collection;
 
 public interface PostService {
-    ResponseEntity<PostDTO>createPost(PostDTO postDTO);
-    ResponseEntity<PostDTO>getPostById(Long id);
-    ResponseEntity<PostDTO>updatePost(PostDTO postDTO);
-    ResponseEntity<PostDTO>deletePost(PostDTO postDTO);
-    ResponseEntity<Collection<PostDTO>>getPostOrderedByDateDesc(int page);
-    ResponseEntity<Long> countPostByUserId(long userId);
-    ResponseEntity<Collection<PostDTO>> getPostOfTypePostByUserId(int page,int user_id);
-    ResponseEntity<Collection<PostDTO>> getPostsOfTypeTwitByUserId(int page,int user_id);
-    ResponseEntity<Long>countAllPost();
-    ResponseEntity<PostDTO> addLike(long postId);
+    PostDTO createPost(PostDTO postDTO, PostMediaDTO postMediaDTO);
+    PostDTO getPostById(Long id);
+    Boolean deletePost(long postId);
+
+    Collection<PostDTO> getPostOrderedByDateDesc(int page);
+    Long countPostByUserId(long userId);
+    Collection<PostDTO> getPostOfTypePostByUserId(int page,int user_id);
+    Collection<PostDTO> getPostsOfTypeTwitByUserId(int page,int user_id);
+    Long countAllPost();
+
+    PostDTO addLike(long postId,long userId);
 }

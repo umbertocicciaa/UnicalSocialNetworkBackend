@@ -1,7 +1,6 @@
-package com.unicalsocial.backend.post;
+package com.unicalsocial.backend.post_type;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.post;
+package com.unicalsocial.backend.post_type;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

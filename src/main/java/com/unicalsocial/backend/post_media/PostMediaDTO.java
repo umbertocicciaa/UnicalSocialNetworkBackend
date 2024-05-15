@@ -1,5 +1,6 @@
-package com.unicalsocial.backend.post;
+package com.unicalsocial.backend.post_media;
 
+import com.unicalsocial.backend.post.PostDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

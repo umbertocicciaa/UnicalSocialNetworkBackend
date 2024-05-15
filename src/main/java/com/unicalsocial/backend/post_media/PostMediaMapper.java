@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.post;
+package com.unicalsocial.backend.post_media;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
