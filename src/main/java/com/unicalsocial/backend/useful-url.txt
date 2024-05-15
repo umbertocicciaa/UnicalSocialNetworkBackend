@@ -1,0 +1,2 @@
+http://localhost:8081/swagger-ui/index.html?configUrl=/myservice/v3.0.0/api-docs/swagger-config#/
+http://localhost:4200/
