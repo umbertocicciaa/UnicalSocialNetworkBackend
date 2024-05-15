@@ -11,7 +11,10 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "comment")
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

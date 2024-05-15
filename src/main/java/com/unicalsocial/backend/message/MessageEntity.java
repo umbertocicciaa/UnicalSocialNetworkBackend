@@ -12,7 +12,10 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 @Table(name = "message")
 public class MessageEntity {
     @Id

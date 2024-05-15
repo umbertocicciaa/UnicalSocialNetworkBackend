@@ -11,7 +11,10 @@ import java.io.Serial;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
 @Embeddable
 public class GroupMemberIdEntity implements java.io.Serializable {
     @Serial
