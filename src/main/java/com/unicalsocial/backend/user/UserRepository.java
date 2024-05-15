@@ -1,13 +1,15 @@
 package com.unicalsocial.backend.user;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
+import java.util.Optional;
 
-
+@Hidden
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     Collection<UserEntity> findAllByOrderBySignupDateAsc();
 
@@ -30,5 +32,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
             "WHERE u.profile_name LIKE %:partialName%", nativeQuery = true)
     Long countUsersByProfileNameContaining(@Param("partialName") String partialName);
 
-    UserEntity findByProfileName(String username);
+    Optional<UserEntity> findByProfileName(String username);
 }

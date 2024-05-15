@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -56,7 +54,7 @@ public class UserEntityControllerTest {
 
     @Test
     public void getAllUsers() throws Exception {
-        when(userService.getAllUser()).thenReturn(ResponseEntity.ok().body(Arrays.asList(user1, user2)));
+        when(userService.getAllUser()).thenReturn(Arrays.asList(user1, user2));
         ResultActions response = mockMvc.perform(get("/api/v1/User"+"/users").contentType(MediaType.APPLICATION_JSON));
         response
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -67,7 +65,7 @@ public class UserEntityControllerTest {
     public void getUserById() throws Exception {
         // Mocking the user id
         int id = 1;
-        when(userService.getUserById(id)).thenReturn(ResponseEntity.ok().body(user1));
+        when(userService.getUserById(id)).thenReturn(user1);
         ResultActions response = mockMvc.perform(get("/api/v1/User/users/" + id)
                 .contentType(MediaType.APPLICATION_JSON));
         response.andExpect(MockMvcResultMatchers.status().isOk())
@@ -76,7 +74,7 @@ public class UserEntityControllerTest {
 
     @Test
     public void createUser() throws Exception {
-        when(userService.createUser(user1)).thenReturn(new ResponseEntity<>(user1, HttpStatus.CREATED));
+        when(userService.createUser(user1)).thenReturn(user1);
         ResultActions response = mockMvc.perform(post("/api/v1/User/users/save")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(user1)));

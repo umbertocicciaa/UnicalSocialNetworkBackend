@@ -46,21 +46,21 @@ public class UserEntityServiceTest {
     public void getAllUser() {
         when(userRepository.findAll()).thenReturn(List.of(UserMapper.INSTANCE.userDtoToUser(user1), UserMapper.INSTANCE.userDtoToUser(user2)));
         var users = userService.getAllUser();
-        Assertions.assertEquals(2, Objects.requireNonNull(users.getBody()).size());
+        Assertions.assertEquals(2, Objects.requireNonNull(users).size());
     }
 
     @Test
     public void getUserById() {
         when(userRepository.findById(1)).thenReturn(Optional.ofNullable(UserMapper.INSTANCE.userDtoToUser(user1)));
         var user = userService.getUserById(1);
-        Assertions.assertEquals(user1.getProfileName(), Objects.requireNonNull(user.getBody()).getProfileName());
+        Assertions.assertEquals(user1.getProfileName(), Objects.requireNonNull(user).getProfileName());
     }
 
     @Test
     public void createUser() {
         when(userRepository.save(UserMapper.INSTANCE.userDtoToUser(user1))).thenReturn(UserMapper.INSTANCE.userDtoToUser(user1));
         var user = userService.createUser(user1);
-        Assertions.assertEquals(user1.getProfileName(), Objects.requireNonNull(user.getBody()).getProfileName());
+        Assertions.assertEquals(user1.getProfileName(), Objects.requireNonNull(user).getProfileName());
     }
 
 }

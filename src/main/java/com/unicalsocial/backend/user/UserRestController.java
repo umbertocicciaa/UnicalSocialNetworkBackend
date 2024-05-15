@@ -1,9 +1,10 @@
 package com.unicalsocial.backend.user;
 
+import com.unicalsocial.backend.exception.UserNotFoundException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -11,54 +12,70 @@ import java.util.Collection;
 @RestController
 @AllArgsConstructor
 @RequestMapping("${api.endpoint}"+"User")
+@Tag(name="User")
 public class UserRestController {
 
     private final UserService userService;
 
     @CrossOrigin
     @GetMapping(value = "/users")
-    @PreAuthorize("hasRole('client_admin')")
     public ResponseEntity<Collection<UserDTO>> getUsers() {
-        return this.userService.getAllUser();
+        var users= this.userService.getAllUser();
+        if(users.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(users);
     }
 
     @CrossOrigin
-    @GetMapping(value = "/usersOrdered")
-    @PreAuthorize("hasRole('client_admin')")
-    public ResponseEntity<Collection<UserDTO>> getUsersOrderedBySignUp() {
-        return this.userService.getAllUserOrderedBySignUpDate();
-    }
-
-    @CrossOrigin
-    @PreAuthorize("hasRole('client_admin')")
-    @GetMapping(value = "/users/{id}")
-    public ResponseEntity<UserDTO> getUsersById(@PathVariable int id) {
-        return this.userService.getUserById(id);
-    }
-
-    @CrossOrigin
-    @PostMapping(value = "/users/save")
-    @PreAuthorize("hasRole('client_admin')")
+    @PostMapping(value = "/users")
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
-        return this.userService.createUser(userDTO);
+        return ResponseEntity.ok(this.userService.createUser(userDTO));
     }
 
     @CrossOrigin
-    @GetMapping(value = "/users/getTotal")
-    public ResponseEntity<Long> getTotalUsers(@RequestParam("username")String username) {
-        return this.userService.countAllUsersLikeUsername(username);
+    @GetMapping(value = "/users/id/{id}")
+    public ResponseEntity<UserDTO> getUsersById(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(this.userService.getUserById(id));
+        }catch (UserNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @CrossOrigin
-    @GetMapping(value = "/users_username/{username}")
-    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
-        return this.userService.getUserByUsername(username);
-    }
-
-    @CrossOrigin
-    @GetMapping(value = "/users_username")
+    @GetMapping(value = "/users/username")
     public ResponseEntity<Collection<UserDTO>> getUserLikeUsername(@RequestParam("username") String username, @RequestParam(defaultValue = "0")int page) {
-        return this.userService.getUserLikeUsername(username,page);
+        var users= this.userService.getUserLikeUsername(username,page);
+        if(users.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(users);
     }
+
+    @CrossOrigin
+    @GetMapping(value = "/users/username/{username}")
+    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
+        try {
+            return ResponseEntity.ok(this.userService.getUserByUsername(username));
+        }catch (UserNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/ordered-users")
+    public ResponseEntity<Collection<UserDTO>> getUsersOrderedBySignUp() {
+        var users=this.userService.getAllUserOrderedBySignUpDate();
+        if(users.isEmpty())
+            return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(users);
+    }
+
+
+    @CrossOrigin
+    @GetMapping(value = "/total-users")
+    public ResponseEntity<Long> getTotalUsers(@RequestParam("username")String username) {
+        return ResponseEntity.ok(this.userService.countAllUsersLikeUsername(username));
+    }
+
 
 }
