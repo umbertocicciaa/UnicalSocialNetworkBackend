@@ -3,7 +3,6 @@ package com.unicalsocial.backend.follower;
 import com.unicalsocial.backend.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "follower")

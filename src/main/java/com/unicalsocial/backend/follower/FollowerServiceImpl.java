@@ -32,6 +32,7 @@ public class FollowerServiceImpl implements FollowerService{
     }
 
     @Override
+    @Transactional
     public FollowerDTO followUser(int userId, int userToFollowId) {
         if(userId==userToFollowId)
             throw new CantFollowSameUserException();
@@ -49,6 +50,7 @@ public class FollowerServiceImpl implements FollowerService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Boolean isFollowing(int user, int userToFollow) {
         this.followerRepository.findById(new FollowerId(user,userToFollow)).orElseThrow(FollowerNotFoundException::new);
         return true;

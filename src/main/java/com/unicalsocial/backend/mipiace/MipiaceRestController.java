@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("${api.endpoint}"+"Mipiace")
+@RequestMapping("/api/v1/Mipiace")
 @Tag(name="Mipiace")
 public class MipiaceRestController {
     private final MipiaceService mipiaceService;
