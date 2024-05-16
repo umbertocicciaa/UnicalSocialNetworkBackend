@@ -1,31 +1,24 @@
-api:
-    endpoint: /api/v1/
-jwt:
-    auth:
-        converter:
-            principle-attribute: preferred_username
-            resource-id: unical_rest_api
-server:
-    port: 8081
 spring:
-    application:
-        name: Unical Social Network Backend
     datasource:
         password: root
         url: jdbc:postgresql://localhost:5432/unical_social_network
         username: postgres
+        driver-class-name: org.postgresql.Driver
     jpa:
         hibernate:
-            ddl-auto: validate
+            ddl-auto: update
+        show-sql: false
         properties:
             hibernate:
-                dialect: org.hibernate.dialect.PostgreSQLDialect
-                jdbc:
-                    lob:
-                        non_contextual_creation: true
+                format_sql: true
+        database: postgresql
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+application:
     security:
-        oauth2:
-            resourceserver:
-                jwt:
-                    issuer-uri: http://localhost:8080/realms/master
-                    jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+        jwt:
+            secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+            expiration: 86400000 # a day
+            refresh-token:
+                expiration: 604800000 # 7 days
+

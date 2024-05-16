@@ -1,6 +1,5 @@
 package com.unicalsocial.backend.user;
 
-import com.unicalsocial.backend.exception.UserNotFoundException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -11,7 +10,7 @@ import java.util.Collection;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("${api.endpoint}"+"User")
+@RequestMapping("/api/v1/User")
 @Tag(name="User")
 public class UserRestController {
 
@@ -21,8 +20,6 @@ public class UserRestController {
     @GetMapping(value = "/users")
     public ResponseEntity<Collection<UserDTO>> getUsers() {
         var users= this.userService.getAllUser();
-        if(users.isEmpty())
-            return ResponseEntity.noContent().build();
         return ResponseEntity.ok(users);
     }
 
@@ -35,39 +32,26 @@ public class UserRestController {
     @CrossOrigin
     @GetMapping(value = "/users/id/{id}")
     public ResponseEntity<UserDTO> getUsersById(@PathVariable int id) {
-        try {
-            return ResponseEntity.ok(this.userService.getUserById(id));
-        }catch (UserNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(this.userService.getUserById(id));
+
     }
 
     @CrossOrigin
     @GetMapping(value = "/users/username")
     public ResponseEntity<Collection<UserDTO>> getUserLikeUsername(@RequestParam("username") String username, @RequestParam(defaultValue = "0")int page) {
-        var users= this.userService.getUserLikeUsername(username,page);
-        if(users.isEmpty())
-            return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(this.userService.getUserLikeUsername(username,page));
     }
 
     @CrossOrigin
     @GetMapping(value = "/users/username/{username}")
     public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
-        try {
-            return ResponseEntity.ok(this.userService.getUserByUsername(username));
-        }catch (UserNotFoundException e){
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(this.userService.getUserByUsername(username));
     }
 
     @CrossOrigin
     @GetMapping(value = "/ordered-users")
     public ResponseEntity<Collection<UserDTO>> getUsersOrderedBySignUp() {
-        var users=this.userService.getAllUserOrderedBySignUpDate();
-        if(users.isEmpty())
-            return ResponseEntity.noContent().build();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(this.userService.getAllUserOrderedBySignUpDate());
     }
 
 

@@ -1,6 +1,5 @@
 package com.unicalsocial.backend.user;
 
-import org.springframework.http.ResponseEntity;
 
 import java.util.Collection;
 

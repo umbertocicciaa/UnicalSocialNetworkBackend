@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.security;
+package com.unicalsocial.backend.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
