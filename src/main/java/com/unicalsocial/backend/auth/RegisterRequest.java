@@ -17,5 +17,4 @@ public class RegisterRequest {
   private String profilename;
   private String email;
   private String password;
-  private RoleEnum role;
 }

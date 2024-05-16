@@ -30,7 +30,7 @@ public class UserRestController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/users/id/{id}")
+    @GetMapping(value = "/users/{id}")
     public ResponseEntity<UserDTO> getUsersById(@PathVariable int id) {
         return ResponseEntity.ok(this.userService.getUserById(id));
 

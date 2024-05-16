@@ -5,6 +5,7 @@ import com.unicalsocial.backend.security.JwtService;
 import com.unicalsocial.backend.token.TokenEntity;
 import com.unicalsocial.backend.token.TokenRepository;
 import com.unicalsocial.backend.token.TokenType;
+import com.unicalsocial.backend.user.RoleEnum;
 import com.unicalsocial.backend.user.UserEntity;
 import com.unicalsocial.backend.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,10 +16,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository repository;
@@ -27,6 +30,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
         var user = UserEntity.builder()
                 .firstname(request.getFirstname())
@@ -34,7 +38,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .profileName(request.getProfilename())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
+                .role(RoleEnum.USER)
                 .build();
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -46,6 +50,7 @@ public class AuthenticationService {
                 .build();
     }
 
+    @Transactional
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -87,6 +92,7 @@ public class AuthenticationService {
         tokenRepository.saveAll(validUserTokens);
     }
 
+    @Transactional
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
