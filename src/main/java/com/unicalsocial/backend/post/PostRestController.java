@@ -64,11 +64,11 @@ public class PostRestController {
 
     @CrossOrigin
     @PutMapping(value = "/posts/posts/likes")
-    public ResponseEntity<PostResponse> addLike(@RequestBody long id,Authentication authentication) {
+    public ResponseEntity<PostResponse> addLike(@RequestBody AddLikeRequest request,Authentication authentication) {
         var remainingRetries = 3;
         while (remainingRetries > 0) {
             try {
-                return ResponseEntity.ok(this.postService.addLike(id, authentication));
+                return ResponseEntity.ok(this.postService.addLike(request, authentication));
             } catch (ObjectOptimisticLockingFailureException e) {
                 remainingRetries--;
                 if (remainingRetries == 0) {

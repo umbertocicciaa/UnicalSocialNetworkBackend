@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @Transactional
 @AllArgsConstructor
@@ -36,15 +38,15 @@ public class FollowerServiceImpl implements FollowerService{
 
     @Override
     @Transactional
-    public FollowerDTO followUser(Authentication authentication, int userToFollowId) {
+    public FollowerDTO followUser(Authentication authentication, FollowerRequest userToFollowId) {
         var user = (UserEntity) authentication.getPrincipal();
-        if(user.getId()==userToFollowId)
+        if(Objects.equals(user.getId(), userToFollowId.getUserId()))
             throw new CantFollowSameUserException();
-        var userToFollow = this.userService.getUserById(userToFollowId);
+        var userToFollow = this.userService.getUserById(userToFollowId.getUserId());
         if(userToFollow == null)
             throw new UserNotFoundException();
         var followerEntity = FollowerEntity.builder()
-                .id(new FollowerId(user.getId(),userToFollowId))
+                .id(new FollowerId(user.getId(),userToFollowId.getUserId()))
                 .followerUserEntity(user)
                 .followingUserEntity(this.userMapper.toUserEntity(userToFollow))
                 .build();

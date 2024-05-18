@@ -108,14 +108,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public PostResponse addLike(long postId, Authentication authentication) {
-        if(this.mipiaceService.existMipiace(Math.toIntExact(postId),authentication))
+    public PostResponse addLike(AddLikeRequest request, Authentication authentication) {
+        if(this.mipiaceService.existMipiace(Math.toIntExact(request.getPostId()),authentication))
             throw new UserHasLikedPostException();
-        var id = Math.toIntExact(postId);
+        var id = Math.toIntExact(request.getPostId());
         var post = this.postRepository.findById(id).orElseThrow(PostNotFoundException::new);
         post.setLike(post.getLike() + 1);
         var postToReturn = this.postRepository.save(post);
-        this.mipiaceService.createMipiace(Math.toIntExact(postId),authentication);
+        this.mipiaceService.createMipiace(Math.toIntExact(request.getPostId()),authentication);
         return postMapper.toPostResponse(postToReturn);
     }
 

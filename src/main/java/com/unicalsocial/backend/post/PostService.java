@@ -14,5 +14,5 @@ public interface PostService {
     Collection<PostResponse> getPostOfTypePostByUserId(int page,int user_id);
     Collection<PostResponse> getPostsOfTypeTwitByUserId(int page,int user_id);
     Long countAllPost();
-    PostResponse addLike(long postId, Authentication authentication);
+    PostResponse addLike(AddLikeRequest request, Authentication authentication);
 }

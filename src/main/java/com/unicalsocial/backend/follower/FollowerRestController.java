@@ -33,7 +33,7 @@ public class FollowerRestController {
 
     @CrossOrigin
     @PostMapping(value = "/follow")
-    ResponseEntity<FollowerDTO> follow(Authentication authentication, @RequestBody int userToFollow) {
+    ResponseEntity<FollowerDTO> follow(Authentication authentication, @RequestBody FollowerRequest userToFollow) {
         return ResponseEntity.ok(this.followerService.followUser(authentication, userToFollow));
 
     }

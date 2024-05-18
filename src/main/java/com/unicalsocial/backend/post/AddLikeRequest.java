@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.post_media;
+package com.unicalsocial.backend.post;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostMediaCreateResponse {
-    private Integer id;
+public class AddLikeRequest {
     private Integer postId;
-    private byte[] mediaFile;
 }
