@@ -1,14 +1,15 @@
 package com.unicalsocial.backend.post;
 
 
-import com.unicalsocial.backend.post_media.PostMediaDTO;
+import com.unicalsocial.backend.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Collection;
 
 @RestController
@@ -21,46 +22,62 @@ public class PostRestController {
 
     @CrossOrigin
     @GetMapping(value = "/posts")
-    public ResponseEntity<Collection<PostDTO>> getPosts(@RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<Collection<PostResponse>> getPosts(@RequestParam(defaultValue = "0") int page) {
         return ResponseEntity.ok(this.postService.getPostOrderedByDateDesc(page));
     }
 
     @CrossOrigin
     @GetMapping(value = "/posts/{id}")
-    public ResponseEntity<PostDTO> getPostsById(@PathVariable long id) {
+    public ResponseEntity<PostResponse> getPostsById(@PathVariable long id) {
         return ResponseEntity.ok(this.postService.getPostById(id));
     }
 
     @CrossOrigin
     @GetMapping(value = "/posts/posts")
-    public ResponseEntity<Collection<PostDTO>> getPostsOfTypePost(@RequestParam(defaultValue = "0") int page, @RequestParam int user_id) {
+    public ResponseEntity<Collection<PostResponse>> getPostsOfTypePost(@RequestParam(defaultValue = "0") int page, @RequestParam int user_id) {
         return ResponseEntity.ok(this.postService.getPostOfTypePostByUserId(page, user_id));
     }
 
     @CrossOrigin
     @GetMapping(value = "/posts/twits")
-    public ResponseEntity<Collection<PostDTO>> getPostsOfTypeTwit(@RequestParam(defaultValue = "0") int page, @RequestParam int user_id) {
+    public ResponseEntity<Collection<PostResponse>> getPostsOfTypeTwit(@RequestParam(defaultValue = "0") int page, @RequestParam int user_id) {
         return ResponseEntity.ok(this.postService.getPostsOfTypeTwitByUserId(page, user_id));
     }
 
     @CrossOrigin
     @PostMapping(value = "/posts/posts")
-    public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO, @RequestBody PostMediaDTO postMediaDTO) {
-        return ResponseEntity.ok(this.postService.createPost(postDTO, postMediaDTO));
+    public ResponseEntity<PostCreatedResponse> createPost(@RequestBody @Valid PostCreateRequest request,Authentication authentication) {
+        return ResponseEntity.ok(this.postService.createPost(request,authentication));
     }
 
     @CrossOrigin
     @PostMapping(value = "/posts/twits")
-    public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO) {
+    public ResponseEntity<PostResponse> createPost(@RequestBody @Valid TwitCreateRequest request, Authentication authentication) {
         return null;
     }
 
     @CrossOrigin
-    @PostMapping(value = "/posts/{postId}")
+    @DeleteMapping(value = "/posts/{postId}")
     public ResponseEntity<Boolean> deletePost(@PathVariable long postId) {
         return ResponseEntity.ok(this.postService.deletePost(postId));
     }
 
+    @CrossOrigin
+    @PutMapping(value = "/posts/posts/likes")
+    public ResponseEntity<PostResponse> addLike(@RequestBody long id,Authentication authentication) {
+        var remainingRetries = 3;
+        while (remainingRetries > 0) {
+            try {
+                return ResponseEntity.ok(this.postService.addLike(id, authentication));
+            } catch (ObjectOptimisticLockingFailureException e) {
+                remainingRetries--;
+                if (remainingRetries == 0) {
+                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
+                }
+            }
+        }
+        return ResponseEntity.internalServerError().build();
+    }
 
     @CrossOrigin
     @GetMapping(value = "/total-posts/{user_id}")
@@ -74,21 +91,5 @@ public class PostRestController {
         return ResponseEntity.ok(this.postService.countAllPost());
     }
 
-    @CrossOrigin
-    @PostMapping(value = "/likes")
-    public ResponseEntity<PostDTO> addLike(@RequestBody long id, @RequestBody int user_id) {
-        var remainingRetries = 3;
-        while (remainingRetries > 0) {
-            try {
-                return ResponseEntity.ok(this.postService.addLike(id, user_id));
-            } catch (ObjectOptimisticLockingFailureException e) {
-                remainingRetries--;
-                if (remainingRetries == 0) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT).build();
-                }
-            }
-        }
-        return ResponseEntity.internalServerError().build();
-    }
 
 }

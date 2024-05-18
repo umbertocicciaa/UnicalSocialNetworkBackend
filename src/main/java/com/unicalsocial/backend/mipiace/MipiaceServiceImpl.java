@@ -1,8 +1,11 @@
 package com.unicalsocial.backend.mipiace;
 
 import com.unicalsocial.backend.exception.MipiaceNotFoundException;
+import com.unicalsocial.backend.post.PostEntity;
+import com.unicalsocial.backend.user.UserEntity;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,29 +19,42 @@ public class MipiaceServiceImpl implements MipiaceService {
 
     @Override
     @Transactional
-    public MipiaceDTO createMipiace(int userId, int postId) {
-        var mipiace = this.mipiaceRepository.save(Mipiace.builder().id(MipiaceId.builder().postId(postId).userId(userId).build()).build());
+    public MipiaceDTO createMipiace(int postId, Authentication authentication) {
+        var user = (UserEntity) authentication.getPrincipal();
+        var mipiace = this.mipiaceRepository.save(
+                Mipiace.builder().id(MipiaceId.builder()
+                        .postId(postId)
+                        .userId(user.getId())
+                        .build())
+               .post(PostEntity.builder()
+                                .id(postId)
+                                .build())
+               .user(user)
+               .build());
         return MipiaceMapper.INSTANCE.MipiaceToMipiaceDto(mipiace);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public MipiaceDTO getMipiace(int userid, int postId) {
-        var mipiace = this.mipiaceRepository.findById(MipiaceId.builder().postId(postId).userId(userid).build()).orElseThrow(MipiaceNotFoundException::new);
+    public MipiaceDTO getMipiace(int postId, Authentication authentication) {
+        var user = (UserEntity) authentication.getPrincipal();
+        var mipiace = this.mipiaceRepository.findById(MipiaceId.builder().postId(postId).userId(user.getId()).build()).orElseThrow(MipiaceNotFoundException::new);
         return MipiaceMapper.INSTANCE.MipiaceToMipiaceDto(mipiace);
     }
 
     @Override
     @Transactional
-    public Boolean deleteMipiace(int userid, int postId) {
-        var mipiace = this.mipiaceRepository.findById(MipiaceId.builder().postId(postId).userId(userid).build()).orElseThrow(MipiaceNotFoundException::new);
+    public Boolean deleteMipiace(int postId, Authentication authentication) {
+        var user = (UserEntity) authentication.getPrincipal();
+        var mipiace = this.mipiaceRepository.findById(MipiaceId.builder().postId(postId).userId(user.getId()).build()).orElseThrow(MipiaceNotFoundException::new);
         this.mipiaceRepository.delete(mipiace);
         return true;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Boolean existMipiace(int userid, int postId) {
-        return this.mipiaceRepository.findById(MipiaceId.builder().postId(postId).userId(userid).build()).isPresent();
+    public Boolean existMipiace(int postId, Authentication authentication) {
+        var user = (UserEntity) authentication.getPrincipal();
+        return this.mipiaceRepository.findById(MipiaceId.builder().postId(postId).userId(user.getId()).build()).isPresent();
     }
 }

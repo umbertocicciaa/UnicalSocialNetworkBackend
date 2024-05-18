@@ -1,14 +1,32 @@
 package com.unicalsocial.backend.post_media;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Service;
 
-@Mapper
-public interface PostMediaMapper {
+@Service
+public class PostMediaMapper implements PostMediaMapperInterface{
 
-    PostMediaMapper INSTANCE = Mappers.getMapper(PostMediaMapper.class);
+    public PostMediaEntity toPostMediaEntity(PostMediaCreateRequest request){
+        return PostMediaEntity.builder()
+                .mediaFile(request.getMediaFile())
+                .postEntity(request.getPostEntity())
+                .build();
+    }
 
-    PostMediaDTO postMediaToPostMediaDTO(PostMediaEntity postMedia);
+    public PostMediaResponse toPostMediaResponse(PostMediaEntity postMediaEntity){
+        return PostMediaResponse.builder()
+                .mediaFile(postMediaEntity.getMediaFile())
+                .postId(postMediaEntity.getPostEntity().getId())
+                .id(postMediaEntity.getId())
+                .build();
+    }
 
-    PostMediaEntity postMediaDTOToPostMedia(PostMediaDTO postMediaDTO);
+    public PostMediaCreateResponse toPostMediaCreateResponse(PostMediaEntity postMediaEntity){
+        return PostMediaCreateResponse.builder()
+                .mediaFile(postMediaEntity.getMediaFile())
+                .id(postMediaEntity.getId())
+                .postId(postMediaEntity.getPostEntity().getId())
+                .build();
+    }
+
+
 }

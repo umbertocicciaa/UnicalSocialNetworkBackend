@@ -1,8 +1,10 @@
 package com.unicalsocial.backend.mipiace;
 
+import org.springframework.security.core.Authentication;
+
 public interface MipiaceService {
-    MipiaceDTO createMipiace(int userId, int postId);
-    MipiaceDTO getMipiace(int userid, int postid);
-    Boolean deleteMipiace(int userid,int postId);
-    Boolean existMipiace(int userid,int postIs);
+    MipiaceDTO createMipiace(int postId, Authentication authentication);
+    MipiaceDTO getMipiace(int postid,Authentication authentication);
+    Boolean deleteMipiace(int postId,Authentication authentication);
+    Boolean existMipiace(int postIs,Authentication authentication);
 }

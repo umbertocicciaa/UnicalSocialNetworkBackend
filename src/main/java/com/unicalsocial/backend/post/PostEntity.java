@@ -54,6 +54,10 @@ public class PostEntity {
     @Column(name = "version")
     @ColumnDefault("0")
     @Version
-    private Integer version;
+    private int version;
 
+    @PrePersist
+    protected void onCreate() {
+        createDatetime = Instant.now();
+    }
 }

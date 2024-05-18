@@ -1,9 +1,11 @@
 package com.unicalsocial.backend.follower;
 
 
+import org.springframework.security.core.Authentication;
+
 public interface FollowerService {
     Long countFollowers(int userId);
     Long countFollowing(int userId);
-    FollowerDTO followUser(int userId, int userToFollowId);
+    FollowerDTO followUser(Authentication authentication , int userToFollowId);
     Boolean isFollowing(int user, int userToFollow);
 }

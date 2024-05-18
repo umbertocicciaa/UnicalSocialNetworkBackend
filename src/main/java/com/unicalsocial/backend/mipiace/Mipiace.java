@@ -11,6 +11,8 @@ import lombok.*;
 @EqualsAndHashCode
 @Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "mipiace")
 public class Mipiace {
     @EmbeddedId

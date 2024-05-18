@@ -1,7 +1,6 @@
 package com.unicalsocial.backend.user;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,39 +17,33 @@ public class UserRestController {
 
     @CrossOrigin
     @GetMapping(value = "/users")
-    public ResponseEntity<Collection<UserDTO>> getUsers() {
+    public ResponseEntity<Collection<UserResponse>> getUsers() {
         var users= this.userService.getAllUser();
         return ResponseEntity.ok(users);
     }
 
     @CrossOrigin
-    @PostMapping(value = "/users")
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(this.userService.createUser(userDTO));
-    }
-
-    @CrossOrigin
     @GetMapping(value = "/users/{id}")
-    public ResponseEntity<UserDTO> getUsersById(@PathVariable int id) {
+    public ResponseEntity<UserResponse> getUsersById(@PathVariable int id) {
         return ResponseEntity.ok(this.userService.getUserById(id));
 
     }
 
     @CrossOrigin
     @GetMapping(value = "/users/username")
-    public ResponseEntity<Collection<UserDTO>> getUserLikeUsername(@RequestParam("username") String username, @RequestParam(defaultValue = "0")int page) {
+    public ResponseEntity<Collection<UserResponse>> getUserLikeUsername(@RequestParam("username") String username, @RequestParam(defaultValue = "0")int page) {
         return ResponseEntity.ok(this.userService.getUserLikeUsername(username,page));
     }
 
     @CrossOrigin
     @GetMapping(value = "/users/username/{username}")
-    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username) {
+    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.ok(this.userService.getUserByUsername(username));
     }
 
     @CrossOrigin
     @GetMapping(value = "/ordered-users")
-    public ResponseEntity<Collection<UserDTO>> getUsersOrderedBySignUp() {
+    public ResponseEntity<Collection<UserResponse>> getUsersOrderedBySignUp() {
         return ResponseEntity.ok(this.userService.getAllUserOrderedBySignUpDate());
     }
 

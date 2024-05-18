@@ -3,6 +3,7 @@ package com.unicalsocial.backend.follower;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,8 +33,8 @@ public class FollowerRestController {
 
     @CrossOrigin
     @PostMapping(value = "/follow")
-    ResponseEntity<FollowerDTO> follow(@RequestBody int user, @RequestBody int userToFollow) {
-        return ResponseEntity.ok(this.followerService.followUser(user, userToFollow));
+    ResponseEntity<FollowerDTO> follow(Authentication authentication, @RequestBody int userToFollow) {
+        return ResponseEntity.ok(this.followerService.followUser(authentication, userToFollow));
 
     }
 

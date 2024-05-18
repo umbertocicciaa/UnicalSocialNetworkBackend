@@ -1,19 +1,18 @@
 package com.unicalsocial.backend.post;
 
-import com.unicalsocial.backend.post_media.PostMediaDTO;
+import org.springframework.security.core.Authentication;
 
 import java.util.Collection;
 
+
 public interface PostService {
-    PostDTO createPost(PostDTO postDTO, PostMediaDTO postMediaDTO);
-    PostDTO getPostById(Long id);
+    PostCreatedResponse createPost(PostCreateRequest request, Authentication authentication);
+    PostResponse getPostById(Long id);
     Boolean deletePost(long postId);
-
-    Collection<PostDTO> getPostOrderedByDateDesc(int page);
+    Collection<PostResponse> getPostOrderedByDateDesc(int page);
     Long countPostByUserId(long userId);
-    Collection<PostDTO> getPostOfTypePostByUserId(int page,int user_id);
-    Collection<PostDTO> getPostsOfTypeTwitByUserId(int page,int user_id);
+    Collection<PostResponse> getPostOfTypePostByUserId(int page,int user_id);
+    Collection<PostResponse> getPostsOfTypeTwitByUserId(int page,int user_id);
     Long countAllPost();
-
-    PostDTO addLike(long postId,long userId);
+    PostResponse addLike(long postId, Authentication authentication);
 }

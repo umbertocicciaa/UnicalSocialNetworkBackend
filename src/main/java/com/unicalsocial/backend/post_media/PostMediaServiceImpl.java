@@ -15,20 +15,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostMediaServiceImpl implements PostMediaService{
 
     private final PostMediaRepository postMediaRepository;
+    private final PostMediaMapperInterface postMediaMapper;
 
     @Override
     @Transactional
-    public PostMediaDTO createPostMedia(PostMediaDTO postMediaDTO) {
-        var media = this.postMediaRepository.save(PostMediaMapper.INSTANCE.postMediaDTOToPostMedia(postMediaDTO));
-        return PostMediaMapper.INSTANCE.postMediaToPostMediaDTO(media);
+    public PostMediaCreateResponse createPostMedia(PostMediaCreateRequest request) {
+        var postMedia = postMediaMapper.toPostMediaEntity(request);
+        var media = this.postMediaRepository.save(postMedia);
+        return postMediaMapper.toPostMediaCreateResponse(media);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public PostMediaDTO getPostMediaOfPost(long id) {
+    public PostMediaResponse getPostMediaOfPost(long id) {
         var postEntity = PostEntity.builder().id((int)id).build();
-        var media=postMediaRepository.findByPostEntity(postEntity);
-        return media.map(PostMediaMapper.INSTANCE::postMediaToPostMediaDTO).orElseThrow(PostMediaNotFoundException::new);
+        var media=postMediaRepository.findByPostEntity(postEntity).orElseThrow(PostMediaNotFoundException::new);
+        return postMediaMapper.toPostMediaResponse(media);
     }
 
 
