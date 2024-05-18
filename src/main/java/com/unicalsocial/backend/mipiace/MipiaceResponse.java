@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class MipiaceDTO {
-    private PostEntity post;
-    private UserEntity user;
+    private Integer postId;
+    private Integer userId;
 }
