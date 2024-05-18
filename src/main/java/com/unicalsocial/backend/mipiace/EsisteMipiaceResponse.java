@@ -1,2 +1,14 @@
-package com.unicalsocial.backend.mipiace;public class EsisteMipiaceResponse {
+package com.unicalsocial.backend.mipiace;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class EsisteMipiaceResponse {
+    private boolean esisteMiPiace;
 }

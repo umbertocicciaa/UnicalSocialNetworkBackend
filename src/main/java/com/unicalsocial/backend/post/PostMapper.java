@@ -1,8 +1,7 @@
 package com.unicalsocial.backend.post;
 
 
-import com.unicalsocial.backend.exception.PostTypeNotFoundException;
-import com.unicalsocial.backend.post_type.PostTypeRepository;
+import com.unicalsocial.backend.post_media.PostMediaEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,34 +9,35 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class PostMapper implements PostMapperInterface{
 
-    private final PostTypeRepository postTypeRepository;
-
-    public PostEntity toPost(PostCreateRequest request) {
-        var postType = postTypeRepository.findByPostTypeName("post").orElseThrow(PostTypeNotFoundException::new);
-        return PostEntity.builder()
-                .like(0)
-                .postTypeEntity(postType)
-                .caption(request.getCaption())
+    @Override
+    public PostCreatedResponse toPostCreatedResponse(PostEntity post, PostMediaEntity postMedia) {
+        return PostCreatedResponse.builder()
+                .id(post.getId())
+                .caption(post.getCaption())
+                .like(post.getLike())
+                .pics(postMedia.getMediaFile())
+                .userId(post.getCreatedByUserid().getId())
                 .build();
     }
 
-    public PostCreatedResponse toPostCreatedResponse(PostEntity postEntity) {
-        return  PostCreatedResponse.builder()
-                .caption(postEntity.getCaption())
-                .id(postEntity.getId())
-                .like(postEntity.getLike())
-                .postTypeEntity(postEntity.getPostTypeEntity())
-                .build();
-    }
-
-    public PostResponse toPostResponse(PostEntity postEntity) {
-        var postType = this.postTypeRepository.findById(postEntity.getPostTypeEntity().getId()).orElseThrow(PostTypeNotFoundException::new);
+    @Override
+    public PostResponse toPostResponseWithImage(PostEntity post, PostMediaEntity postMedia) {
         return PostResponse.builder()
-                .caption(postEntity.getCaption())
-                .id(postEntity.getId())
-                .like(postEntity.getLike())
-                .postType(postType.getPostTypeName())
+                .id(post.getId())
+                .caption(post.getCaption())
+                .like(post.getLike())
+                .image(postMedia.getMediaFile())
+                .userId(post.getCreatedByUserid().getId())
                 .build();
     }
 
+    @Override
+    public PostResponse toPostResponseNoImage(PostEntity post) {
+        return PostResponse.builder()
+                .id(post.getId())
+                .caption(post.getCaption())
+                .like(post.getLike())
+                .userId(post.getCreatedByUserid().getId())
+                .build();
+    }
 }

@@ -1,7 +1,9 @@
 package com.unicalsocial.backend.mipiace;
 
 import com.unicalsocial.backend.exception.MipiaceNotFoundException;
-import com.unicalsocial.backend.post.PostEntity;
+import com.unicalsocial.backend.exception.PostNotFoundException;
+import com.unicalsocial.backend.exception.UserCantLikeTwoTimeSamePost;
+import com.unicalsocial.backend.post.PostRepository;
 import com.unicalsocial.backend.user.UserEntity;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
@@ -16,45 +18,57 @@ import org.springframework.transaction.annotation.Transactional;
 public class MipiaceServiceImpl implements MipiaceService {
 
     private final MipiaceRepository mipiaceRepository;
+    private final MipiaceMapper mipiaceMapper;
+    private final PostRepository postRepository;
 
     @Override
     @Transactional
-    public MipiaceDTO createMipiace(int postId, Authentication authentication) {
+    public CreatedMipiceResponse createMipiace(int postId, Authentication authentication) {
         var user = (UserEntity) authentication.getPrincipal();
+        var post = this.postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
+
+        var esisteMipiace = this.mipiaceRepository.findById(MipiaceId.builder()
+                .postId(postId)
+                .userId(user.getId())
+                .build()).isPresent();
+        if (esisteMipiace)
+            throw new UserCantLikeTwoTimeSamePost();
+
         var mipiace = this.mipiaceRepository.save(
-                Mipiace.builder().id(MipiaceId.builder()
-                        .postId(postId)
-                        .userId(user.getId())
-                        .build())
-               .post(PostEntity.builder()
-                                .id(postId)
-                                .build())
-               .user(user)
-               .build());
-        return MipiaceMapper.INSTANCE.MipiaceToMipiaceDto(mipiace);
+                Mipiace.builder()
+                        .user(user)
+                        .post(post)
+                        .build()
+        );
+        return this.mipiaceMapper.toCreatedMipice(mipiace);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public MipiaceDTO getMipiace(int postId, Authentication authentication) {
+    public MipiaceResponse getMipiace(int postId, Authentication authentication) {
         var user = (UserEntity) authentication.getPrincipal();
         var mipiace = this.mipiaceRepository.findById(MipiaceId.builder().postId(postId).userId(user.getId()).build()).orElseThrow(MipiaceNotFoundException::new);
-        return MipiaceMapper.INSTANCE.MipiaceToMipiaceDto(mipiace);
+        return this.mipiaceMapper.toMipiaceResponse(mipiace);
     }
 
     @Override
     @Transactional
-    public Boolean deleteMipiace(int postId, Authentication authentication) {
+    public EliminatoMipiaceResponse deleteMipiace(int postId, Authentication authentication) {
         var user = (UserEntity) authentication.getPrincipal();
         var mipiace = this.mipiaceRepository.findById(MipiaceId.builder().postId(postId).userId(user.getId()).build()).orElseThrow(MipiaceNotFoundException::new);
         this.mipiaceRepository.delete(mipiace);
-        return true;
+        var present = this.mipiaceRepository.findById(MipiaceId.builder().postId(postId).userId(user.getId()).build()).isPresent();
+        return EliminatoMipiaceResponse.builder()
+                .deleted(present)
+                .build();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Boolean existMipiace(int postId, Authentication authentication) {
+    public EsisteMipiaceResponse existMipiace(int postId, Authentication authentication) {
         var user = (UserEntity) authentication.getPrincipal();
-        return this.mipiaceRepository.findById(MipiaceId.builder().postId(postId).userId(user.getId()).build()).isPresent();
+        return EsisteMipiaceResponse.builder()
+                .esisteMiPiace(this.mipiaceRepository.findById(MipiaceId.builder().postId(postId).userId(user.getId()).build()).isPresent())
+                .build();
     }
 }

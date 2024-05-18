@@ -1,7 +1,6 @@
 package com.unicalsocial.backend.post;
 
 
-import com.unicalsocial.backend.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -52,19 +51,19 @@ public class PostRestController {
 
     @CrossOrigin
     @PostMapping(value = "/posts/twits")
-    public ResponseEntity<PostResponse> createPost(@RequestBody @Valid TwitCreateRequest request, Authentication authentication) {
-        return null;
+    public ResponseEntity<TwitCreatedRespose> createTwit(@RequestBody @Valid TwitCreateRequest request, Authentication authentication) {
+        return ResponseEntity.ok(this.postService.createTwit(request,authentication));
     }
 
     @CrossOrigin
     @DeleteMapping(value = "/posts/{postId}")
-    public ResponseEntity<Boolean> deletePost(@PathVariable long postId) {
+    public ResponseEntity<PostDeletedResponse> deletePost(@PathVariable long postId) {
         return ResponseEntity.ok(this.postService.deletePost(postId));
     }
 
     @CrossOrigin
     @PutMapping(value = "/posts/posts/likes")
-    public ResponseEntity<PostResponse> addLike(@RequestBody AddLikeRequest request,Authentication authentication) {
+    public ResponseEntity<PostResponse> addLike(@RequestBody @Valid AddLikeRequest request,Authentication authentication) {
         var remainingRetries = 3;
         while (remainingRetries > 0) {
             try {
@@ -81,13 +80,13 @@ public class PostRestController {
 
     @CrossOrigin
     @GetMapping(value = "/total-posts/{user_id}")
-    public ResponseEntity<Long> countPostsByUserId(@PathVariable long user_id) {
+    public ResponseEntity<PostByUserResponse> countPostsByUserId(@PathVariable long user_id) {
         return ResponseEntity.ok(this.postService.countPostByUserId(user_id));
     }
 
     @CrossOrigin
     @GetMapping(value = "/total-posts")
-    public ResponseEntity<Long> getPostsTotal() {
+    public ResponseEntity<PostCountResponse> getPostsTotal() {
         return ResponseEntity.ok(this.postService.countAllPost());
     }
 

@@ -2,9 +2,16 @@ package com.unicalsocial.backend.handler;
 
 
 import com.unicalsocial.backend.exception.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -77,17 +84,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(UserHasLikedPostException.class)
-    public ResponseEntity<ExceptionResponse> handleException(UserHasLikedPostException exp) {
-        return ResponseEntity.badRequest().body(
-                ExceptionResponse.builder()
-                        .businessErrorCode(BAD_REQUEST.value())
-                        .businessErrorDescription(exp.toString())
-                        .error("Non puoi mettere like due volte allo stesso utente")
-                        .build()
-        );
-    }
-
     @ExceptionHandler(UserNotInitializedException.class)
     public ResponseEntity<ExceptionResponse> handleException(UserNotInitializedException exp) {
         return ResponseEntity
@@ -96,6 +92,32 @@ public class GlobalExceptionHandler {
                         ExceptionResponse.builder()
                                 .businessErrorCode(INTERNAL_SERVER_ERROR.value())
                                 .businessErrorDescription("L'utente non è stato inizializzato")
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
+
+    @ExceptionHandler(UserCantLikeTwoTimeSamePost.class)
+    public ResponseEntity<ExceptionResponse> handleException(UserCantLikeTwoTimeSamePost exp) {
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(BAD_REQUEST.value())
+                                .businessErrorDescription("Non puoi mettere like due volte allo stesso post")
                                 .error(exp.getMessage())
                                 .build()
                 );
@@ -113,8 +135,4 @@ public class GlobalExceptionHandler {
                                 .build()
                 );
     }
-
-
-
-
 }

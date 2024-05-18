@@ -1,6 +1,5 @@
 package com.unicalsocial.backend.message;
 
-import com.unicalsocial.backend.models.ConversationEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

@@ -1,11 +1,10 @@
 package com.unicalsocial.backend.post;
 
 
+import com.unicalsocial.backend.post_media.PostMediaEntity;
+
 public interface PostMapperInterface {
-
-     PostEntity toPost(PostCreateRequest request);
-
-     PostCreatedResponse toPostCreatedResponse(PostEntity postEntity);
-
-     PostResponse toPostResponse(PostEntity postEntity);
+    PostCreatedResponse toPostCreatedResponse(PostEntity post, PostMediaEntity postMedia);
+    PostResponse toPostResponseWithImage(PostEntity post, PostMediaEntity postMedia);
+    PostResponse toPostResponseNoImage(PostEntity post);
 }

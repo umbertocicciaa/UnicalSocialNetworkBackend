@@ -1,11 +1,9 @@
 package com.unicalsocial.backend.follower;
 
 import com.unicalsocial.backend.exception.CantFollowSameUserException;
-import com.unicalsocial.backend.exception.FollowerNotFoundException;
 import com.unicalsocial.backend.exception.UserNotFoundException;
 import com.unicalsocial.backend.user.UserEntity;
-import com.unicalsocial.backend.user.UserMapperInterface;
-import com.unicalsocial.backend.user.UserService;
+import com.unicalsocial.backend.user.UserRepository;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -18,46 +16,51 @@ import java.util.Objects;
 @Transactional
 @AllArgsConstructor
 @Hidden
-public class FollowerServiceImpl implements FollowerService{
+public class FollowerServiceImpl implements FollowerService {
 
     private final FollowerRepository followerRepository;
-    private final UserService userService;
-    private final UserMapperInterface userMapper;
+    private final UserRepository userRepository;
+    private final FollowerMapper followerMapper;
 
     @Override
     @Transactional(readOnly = true)
-    public Long countFollowers(int userId) {
-        return this.followerRepository.countFollowersByUserId(userId);
+    public FollowerNumberResponse countFollowers(int userId) {
+        return FollowerNumberResponse.builder()
+                .followerNumber(Math.toIntExact(this.followerRepository.countFollowersByUserId(userId)))
+                .build();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Long countFollowing(int userId) {
-        return  this.followerRepository.countFollowingByUserId(userId);
+    public FollowingNumberResponse countFollowing(int userId) {
+        return FollowingNumberResponse.builder()
+                .followingNumber(Math.toIntExact(this.followerRepository.countFollowingByUserId(userId)))
+                .build();
     }
 
     @Override
     @Transactional
-    public FollowerDTO followUser(Authentication authentication, FollowerRequest userToFollowId) {
+    public FollowerCreatedResponse followUser(Authentication authentication, FollowerRequest userToFollowId) {
         var user = (UserEntity) authentication.getPrincipal();
-        if(Objects.equals(user.getId(), userToFollowId.getUserId()))
+        if (Objects.equals(user.getId(), userToFollowId.getUserId()))
             throw new CantFollowSameUserException();
-        var userToFollow = this.userService.getUserById(userToFollowId.getUserId());
-        if(userToFollow == null)
-            throw new UserNotFoundException();
+        var userToFollow = this.userRepository.findById(userToFollowId.getUserId()).orElseThrow(UserNotFoundException::new);
         var followerEntity = FollowerEntity.builder()
-                .id(new FollowerId(user.getId(),userToFollowId.getUserId()))
+                .id(new FollowerId(user.getId(), userToFollow.getId()))
                 .followerUserEntity(user)
-                .followingUserEntity(this.userMapper.toUserEntity(userToFollow))
+                .followingUserEntity(userToFollow)
                 .build();
         var follow = this.followerRepository.save(followerEntity);
-        return FollowerMapper.INSTANCE.followerToDto(follow);
+        return this.followerMapper.toFollowerCreatedRespinse(follow);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Boolean isFollowing(int user, int userToFollow) {
-        this.followerRepository.findById(new FollowerId(user,userToFollow)).orElseThrow(FollowerNotFoundException::new);
-        return true;
+    public IsFollowingResponse isFollowing(int user, int userToFollow) {
+        var follwing = this.followerRepository.findById(new FollowerId(user, userToFollow));
+        var isFollowing = follwing.isPresent();
+        return IsFollowingResponse.builder()
+                .isFollowing(isFollowing)
+                .build();
     }
 }

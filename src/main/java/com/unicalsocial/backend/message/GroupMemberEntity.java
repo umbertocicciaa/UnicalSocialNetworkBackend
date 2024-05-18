@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.models;
+package com.unicalsocial.backend.message;
 
 import com.unicalsocial.backend.user.UserEntity;
 import jakarta.persistence.*;

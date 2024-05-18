@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FollowerDTO {
-    private UserResponse followerUserEntity;
-    private UserResponse followingUserEntity;
+public class FollowerCreatedResponse {
+    private Integer followerUserEntity;
+    private Integer followingUserEntity;
 }

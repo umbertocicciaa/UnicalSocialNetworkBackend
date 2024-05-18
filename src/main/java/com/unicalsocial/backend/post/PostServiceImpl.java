@@ -1,29 +1,28 @@
 package com.unicalsocial.backend.post;
 
 import com.unicalsocial.backend.exception.PostNotFoundException;
-import com.unicalsocial.backend.exception.UserHasLikedPostException;
-import com.unicalsocial.backend.mipiace.MipiaceService;
-import com.unicalsocial.backend.post_media.PostMediaCreateRequest;
-import com.unicalsocial.backend.post_media.PostMediaService;
-import com.unicalsocial.backend.post_type.PostTypeDTO;
-import com.unicalsocial.backend.post_type.PostTypeMapper;
-import com.unicalsocial.backend.post_type.PostTypeService;
-import com.unicalsocial.backend.post_type.PostTypeStringEnum;
-import com.unicalsocial.backend.user.UserEntity;
-import com.unicalsocial.backend.user.UserMapperInterface;
-import com.unicalsocial.backend.user.UserResponse;
-import com.unicalsocial.backend.user.UserService;
+import com.unicalsocial.backend.exception.PostTypeNotFoundException;
+import com.unicalsocial.backend.exception.UserCantLikeTwoTimeSamePost;
+import com.unicalsocial.backend.exception.UserNotFoundException;
+import com.unicalsocial.backend.mipiace.Mipiace;
+import com.unicalsocial.backend.mipiace.MipiaceId;
+import com.unicalsocial.backend.mipiace.MipiaceRepository;
+import com.unicalsocial.backend.post_media.PostMediaEntity;
+import com.unicalsocial.backend.post_media.PostMediaRepository;
+import com.unicalsocial.backend.post_type.*;
+import com.unicalsocial.backend.user.*;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -33,22 +32,35 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-    private final PostMediaService postMediaService;
-    private final MipiaceService mipiaceService;
-    private final UserService userService;
-    private final PostTypeService postTypeService;
+    private final PostMediaRepository postMediaRepository;
+    private final MipiaceRepository mipiaceRepository;
+    private final UserRepository userRepository;
+    private final PostTypeRepository postTypeRepository;
     private final PostMapperInterface postMapper;
-    private final UserMapperInterface userMapper;
 
     @Override
     @Transactional
     public PostCreatedResponse createPost(PostCreateRequest request, Authentication authentication) {
         var user = (UserEntity) authentication.getPrincipal();
-        var postEntity = postMapper.toPost(request);
-        postEntity.setCreatedByUserid(user);
+        var postType = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.post.toString()).orElseThrow(PostTypeNotFoundException::new);
+        var postEntity = PostEntity.builder()
+                .postTypeEntity(postType)
+                .createdByUserid(user)
+                .caption(request.getCaption())
+                .build();
         var post = this.postRepository.save(postEntity);
-        this.postMediaService.createPostMedia(PostMediaCreateRequest.builder().postEntity(post).mediaFile(request.getMediaFile()).build());
-        return postMapper.toPostCreatedResponse(post);
+        var postMedia = PostMediaEntity.builder()
+                .postEntity(post)
+                .mediaFile(request.getMediaFile())
+                .build();
+        this.postMediaRepository.save(postMedia);
+        return postMapper.toPostCreatedResponse(post, postMedia);
+    }
+
+    @Override
+    @Transactional
+    public TwitCreatedRespose createTwit(TwitCreateRequest request, Authentication authentication) {
+        return null;
     }
 
     @Override
@@ -56,11 +68,14 @@ public class PostServiceImpl implements PostService {
     public PostResponse getPostById(Long id) {
         var postId = Math.toIntExact(id);
         var post = this.postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        return this.postMapper.toPostResponse(post);
+        var postMedia = this.postMediaRepository.findByPostEntity(post);
+        if (postMedia.isPresent())
+            return this.postMapper.toPostResponseWithImage(post, postMedia.get());
+        return this.postMapper.toPostResponseNoImage(post);
     }
 
     @Override
-    public Boolean deletePost(long postId) {
+    public PostDeletedResponse deletePost(long postId) {
         return null;
     }
 
@@ -70,14 +85,16 @@ public class PostServiceImpl implements PostService {
         final var size = 10;
         var pageable = PageRequest.of(page, size);
         var posts = this.postRepository.findAllByOrderByCreateDatetimeDesc(pageable);
-        return posts.stream().map(postMapper::toPostResponse).toList();
+        return getPostResponses(posts);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Long countPostByUserId(long userId) {
-        var userByUserId = this.userService.getUserById(userId);
-        return this.postRepository.countByCreatedByUserid(this.userMapper.toUserEntity(userByUserId));
+    public PostByUserResponse countPostByUserId(long userId) {
+        var userByUserId = this.userRepository.findById(Math.toIntExact(userId)).orElseThrow(UserNotFoundException::new);
+        return PostByUserResponse.builder()
+                .post(this.postRepository.countByCreatedByUserid(userByUserId))
+                .build();
     }
 
     @Override
@@ -85,9 +102,10 @@ public class PostServiceImpl implements PostService {
     public Collection<PostResponse> getPostOfTypePostByUserId(int page, int userid) {
         final var size = 9;
         var pageable = PageRequest.of(page, size);
-        var user = this.userService.getUserById(userid);
-        var postTypePostDto = this.postTypeService.findPostTypeByName(PostTypeStringEnum.post.toString());
-        return getCollectionResponseEntity(pageable, postTypePostDto, user);
+        var user = this.userRepository.findById(userid).orElseThrow(UserNotFoundException::new);
+        var postTypePost = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.post.toString()).orElseThrow(PostTypeNotFoundException::new);
+        var posts = this.postRepository.findAllByPostTypeEntityAndCreatedByUseridOrderByCreateDatetimeDesc(postTypePost, user, pageable);
+        return getPostResponses(posts);
     }
 
     @Override
@@ -95,34 +113,54 @@ public class PostServiceImpl implements PostService {
     public Collection<PostResponse> getPostsOfTypeTwitByUserId(int page, int userid) {
         final var size = 9;
         var pageable = PageRequest.of(page, size);
-        var user = this.userService.getUserById(userid);
-        var postTypePostDto = this.postTypeService.findPostTypeByName(PostTypeStringEnum.twit.toString());
-        return getCollectionResponseEntity(pageable, postTypePostDto, user);
+        var user = this.userRepository.findById(userid).orElseThrow(UserNotFoundException::new);
+        var postTypeTwit = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.twit.toString()).orElseThrow(PostTypeNotFoundException::new);
+        var posts = this.postRepository.findAllByPostTypeEntityAndCreatedByUseridOrderByCreateDatetimeDesc(postTypeTwit, user, pageable);
+        return getPostResponses(posts);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Long countAllPost() {
-        return this.postRepository.count();
+    public PostCountResponse countAllPost() {
+        return PostCountResponse.builder()
+                .postCount(this.postRepository.count())
+                .build();
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public PostResponse addLike(AddLikeRequest request, Authentication authentication) {
-        if(this.mipiaceService.existMipiace(Math.toIntExact(request.getPostId()),authentication))
-            throw new UserHasLikedPostException();
+        var user = (UserEntity) authentication.getPrincipal();
+        if (this.mipiaceRepository.findById(MipiaceId.builder()
+                .userId(user.getId())
+                .postId(request.getPostId())
+                .build()).isPresent())
+            throw new UserCantLikeTwoTimeSamePost();
         var id = Math.toIntExact(request.getPostId());
         var post = this.postRepository.findById(id).orElseThrow(PostNotFoundException::new);
         post.setLike(post.getLike() + 1);
         var postToReturn = this.postRepository.save(post);
-        this.mipiaceService.createMipiace(Math.toIntExact(request.getPostId()),authentication);
-        return postMapper.toPostResponse(postToReturn);
+        this.mipiaceRepository.save(Mipiace.builder()
+                .user(user)
+                .post(postToReturn)
+                .build());
+        var postMedia = this.postMediaRepository.findByPostEntity(postToReturn);
+        if (postMedia.isPresent())
+            return postMapper.toPostResponseWithImage(postToReturn, postMedia.get());
+        return this.postMapper.toPostResponseNoImage(post);
     }
 
-    private Collection<PostResponse> getCollectionResponseEntity(PageRequest pageable, @NotNull PostTypeDTO postTypePostDto, @NotNull UserResponse user) {
-        var postTypePost = PostTypeMapper.INSTANCE.postTypeDtoToPostType(postTypePostDto);
-        var userEntity = this.userMapper.toUserEntity(user);
-        var posts = this.postRepository.findAllByPostTypeEntityAndCreatedByUseridOrderByCreateDatetimeDesc(postTypePost, userEntity, pageable);
-        return posts.stream().map(postMapper::toPostResponse).collect(Collectors.toList());
+
+    @NotNull
+    private Collection<PostResponse> getPostResponses(Slice<PostEntity> posts) {
+        Collection<PostResponse> postResponses = new ArrayList<>();
+        for (var post : posts) {
+            var postMedia = this.postMediaRepository.findByPostEntity(post);
+            if (postMedia.isPresent())
+                postResponses.add(this.postMapper.toPostResponseWithImage(post, postMedia.get()));
+            else
+                postResponses.add(this.postMapper.toPostResponseNoImage(post));
+        }
+        return postResponses;
     }
 }

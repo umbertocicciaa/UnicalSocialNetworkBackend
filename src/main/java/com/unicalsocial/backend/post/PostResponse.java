@@ -12,4 +12,5 @@ public class PostResponse {
     private String postType;
     private String caption;
     private Integer like;
+    private byte[] image;
 }

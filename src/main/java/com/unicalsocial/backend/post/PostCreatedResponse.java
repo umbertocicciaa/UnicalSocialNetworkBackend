@@ -1,6 +1,5 @@
 package com.unicalsocial.backend.post;
 
-import com.unicalsocial.backend.post_type.PostTypeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,8 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostCreatedResponse {
+    private byte[] pics;
     private Integer id;
-    private PostTypeEntity postTypeEntity;
+    private Integer userId;
     private String caption;
     private Integer like;
 }

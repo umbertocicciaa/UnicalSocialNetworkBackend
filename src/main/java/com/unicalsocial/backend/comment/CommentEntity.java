@@ -47,4 +47,9 @@ public class CommentEntity {
     @Column(name = "comment", nullable = false, length = Integer.MAX_VALUE)
     private String comment;
 
+    @PrePersist
+    protected void onCreate() {
+        createdDatetime = Instant.now();
+    }
+
 }

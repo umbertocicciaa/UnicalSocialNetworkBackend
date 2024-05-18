@@ -1,4 +1,4 @@
-package com.unicalsocial.backend.models;
+package com.unicalsocial.backend.message;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
