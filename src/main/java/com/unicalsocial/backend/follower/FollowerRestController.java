@@ -1,5 +1,6 @@
 package com.unicalsocial.backend.follower;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/api/v1/Follower")
 @Tag(name = "Follower")
+@SecurityRequirement(name = "Bearer Authentication")
 public class FollowerRestController {
     private final FollowerService followerService;
 

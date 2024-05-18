@@ -47,6 +47,8 @@ public class PostServiceImpl implements PostService {
                 .postTypeEntity(postType)
                 .createdByUserid(user)
                 .caption(request.getCaption())
+                .like(0)
+                .version(0)
                 .build();
         var post = this.postRepository.save(postEntity);
         var postMedia = PostMediaEntity.builder()
@@ -76,7 +78,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDeletedResponse deletePost(long postId) {
-        return null;
+
+        var post = this.postRepository.findById(Math.toIntExact(postId)).orElseThrow(PostNotFoundException::new);
+        var media = this.postMediaRepository.findByPostEntity(post);
+        media.ifPresent(this.postMediaRepository::delete);
+        this.postRepository.deleteById(Math.toIntExact(postId));
+        return new PostDeletedResponse(this.postRepository.findById(Math.toIntExact(postId)).isEmpty());
     }
 
     @Override
@@ -140,10 +147,16 @@ public class PostServiceImpl implements PostService {
         var post = this.postRepository.findById(id).orElseThrow(PostNotFoundException::new);
         post.setLike(post.getLike() + 1);
         var postToReturn = this.postRepository.save(post);
-        this.mipiaceRepository.save(Mipiace.builder()
+        var mipiaceid = MipiaceId.builder()
+                .postId(post.getId())
+                .userId(user.getId())
+                .build();
+        var mipiace = Mipiace.builder()
+                .id(mipiaceid)
+                .post(post)
                 .user(user)
-                .post(postToReturn)
-                .build());
+                .build();
+        this.mipiaceRepository.save(mipiace);
         var postMedia = this.postMediaRepository.findByPostEntity(postToReturn);
         if (postMedia.isPresent())
             return postMapper.toPostResponseWithImage(postToReturn, postMedia.get());

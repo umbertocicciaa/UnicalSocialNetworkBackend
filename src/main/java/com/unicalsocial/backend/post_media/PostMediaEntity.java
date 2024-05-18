@@ -24,7 +24,7 @@ public class PostMediaEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id", nullable = false,unique = true)
     private PostEntity postEntity;
 
     @NotNull

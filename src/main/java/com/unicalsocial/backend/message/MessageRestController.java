@@ -1,5 +1,6 @@
 package com.unicalsocial.backend.message;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/Message")
 @AllArgsConstructor
 @Tag(name = "Message")
+@SecurityRequirement(name = "Bearer Authentication")
 public class MessageRestController {
 
     private final MessageService messageService;

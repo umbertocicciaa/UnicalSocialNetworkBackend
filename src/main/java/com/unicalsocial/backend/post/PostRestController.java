@@ -1,6 +1,7 @@
 package com.unicalsocial.backend.post;
 
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @RequestMapping("/api/v1/Post")
 @Tag(name="Post")
+@SecurityRequirement(name = "Bearer Authentication")
 public class PostRestController {
 
     private final PostService postService;

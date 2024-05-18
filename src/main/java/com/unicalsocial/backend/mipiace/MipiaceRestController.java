@@ -1,6 +1,7 @@
 package com.unicalsocial.backend.mipiace;
 
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RequestMapping("/api/v1/Mipiace")
 @Tag(name="Mipiace")
+@SecurityRequirement(name = "Bearer Authentication")
 public class MipiaceRestController {
     private final MipiaceService mipiaceService;
 

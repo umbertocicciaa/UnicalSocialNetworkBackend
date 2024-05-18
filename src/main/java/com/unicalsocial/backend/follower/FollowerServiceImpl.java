@@ -1,6 +1,7 @@
 package com.unicalsocial.backend.follower;
 
 import com.unicalsocial.backend.exception.CantFollowSameUserException;
+import com.unicalsocial.backend.exception.CantFollowTwoTimeSameUser;
 import com.unicalsocial.backend.exception.UserNotFoundException;
 import com.unicalsocial.backend.user.UserEntity;
 import com.unicalsocial.backend.user.UserRepository;
@@ -45,6 +46,13 @@ public class FollowerServiceImpl implements FollowerService {
         if (Objects.equals(user.getId(), userToFollowId.getUserId()))
             throw new CantFollowSameUserException();
         var userToFollow = this.userRepository.findById(userToFollowId.getUserId()).orElseThrow(UserNotFoundException::new);
+        var follower = this.followerRepository.findById(
+                FollowerId.builder()
+                        .followerUserId(user.getId())
+                        .followingUserId(userToFollowId.getUserId())
+                        .build()
+        );
+        if(follower.isPresent()) throw new CantFollowTwoTimeSameUser();
         var followerEntity = FollowerEntity.builder()
                 .id(new FollowerId(user.getId(), userToFollow.getId()))
                 .followerUserEntity(user)

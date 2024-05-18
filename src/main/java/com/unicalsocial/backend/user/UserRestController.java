@@ -1,5 +1,6 @@
 package com.unicalsocial.backend.user;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @RequestMapping("/api/v1/User")
 @Tag(name="User")
+@SecurityRequirement(name = "Bearer Authentication")
 public class UserRestController {
 
     private final UserService userService;

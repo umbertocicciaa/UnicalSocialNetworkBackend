@@ -14,5 +14,6 @@ public class PostCreatedResponse {
     private Integer id;
     private Integer userId;
     private String caption;
+    private String postType;
     private Integer like;
 }

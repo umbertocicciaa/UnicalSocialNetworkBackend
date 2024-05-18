@@ -24,6 +24,17 @@ public class GlobalExceptionHandler {
                 ExceptionResponse.builder()
                         .businessErrorCode(BAD_REQUEST.value())
                         .businessErrorDescription(exp.toString())
+                        .error("Non puoi auto seguirti")
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(CantFollowTwoTimeSameUser.class)
+    public ResponseEntity<ExceptionResponse> handleException(CantFollowTwoTimeSameUser exp) {
+        return ResponseEntity.badRequest().body(
+                ExceptionResponse.builder()
+                        .businessErrorCode(BAD_REQUEST.value())
+                        .businessErrorDescription(exp.toString())
                         .error("Non puoi mettere seguire due volte lo stesso utente")
                         .build()
         );
