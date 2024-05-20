@@ -1,6 +1,5 @@
 package com.unicalsocial.backend.auth;
 
-import com.unicalsocial.backend.user.RoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
