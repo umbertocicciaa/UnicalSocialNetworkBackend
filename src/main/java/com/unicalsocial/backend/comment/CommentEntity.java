@@ -25,10 +25,6 @@ public class CommentEntity {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_replied_to_id")
-    private CommentEntity commentEntityRepliedTo;
-
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "created_by_userid", nullable = false)

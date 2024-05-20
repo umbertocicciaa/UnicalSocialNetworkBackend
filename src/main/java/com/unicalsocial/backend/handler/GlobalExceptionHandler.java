@@ -95,6 +95,17 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(CantDeletePostOfOtherUserException.class)
+    public ResponseEntity<ExceptionResponse> handleException(CantDeletePostOfOtherUserException exp) {
+        return ResponseEntity.badRequest().body(
+                ExceptionResponse.builder()
+                        .businessErrorCode(BAD_REQUEST.value())
+                        .businessErrorDescription(exp.toString())
+                        .error("Non puoi cancellare i post degli altri utenti")
+                        .build()
+        );
+    }
+
     @ExceptionHandler(UserNotInitializedException.class)
     public ResponseEntity<ExceptionResponse> handleException(UserNotInitializedException exp) {
         return ResponseEntity
@@ -129,6 +140,31 @@ public class GlobalExceptionHandler {
                         ExceptionResponse.builder()
                                 .businessErrorCode(BAD_REQUEST.value())
                                 .businessErrorDescription("Non puoi mettere like due volte allo stesso post")
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleException(CommentNotFoundException exp) {
+        return ResponseEntity.badRequest().body(
+                ExceptionResponse.builder()
+                        .businessErrorCode(NOT_FOUND.value())
+                        .businessErrorDescription(exp.toString())
+                        .error("Commento non trovato")
+                        .build()
+        );
+    }
+
+    @ExceptionHandler(CantDeleteCommentOfOtherUserException.class)
+    public ResponseEntity<ExceptionResponse> handleException(CantDeleteCommentOfOtherUserException exp) {
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(BAD_REQUEST.value())
+                                .businessErrorDescription("Non puoi eliminare il commento di un altro utente")
                                 .error(exp.getMessage())
                                 .build()
                 );

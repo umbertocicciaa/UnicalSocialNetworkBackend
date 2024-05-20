@@ -1,5 +1,7 @@
 package com.unicalsocial.backend.comment;
 
+import com.unicalsocial.backend.exception.CantDeleteCommentOfOtherUserException;
+import com.unicalsocial.backend.exception.CommentNotFoundException;
 import com.unicalsocial.backend.exception.PostNotFoundException;
 import com.unicalsocial.backend.post.PostRepository;
 import com.unicalsocial.backend.user.UserEntity;
@@ -8,6 +10,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,7 +36,6 @@ public class CommentServiceImpl implements CommentService {
                     .comment(commentReq.getComment())
                     .createdByUserid(user)
                     .postEntity(post)
-                    .commentEntityRepliedTo(commentToReply.get())
                     .build();
             var persistedComment = this.commentRepository.save(comment);
             return this.commentMapper.toCommentCreatedResponse(persistedComment);
@@ -42,5 +47,26 @@ public class CommentServiceImpl implements CommentService {
                 .build();
         var persistedComment = this.commentRepository.save(comment);
         return this.commentMapper.toCommentCreatedResponse(persistedComment);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Collection<CommentResponse> getCommentByPostId(int postId) {
+        var comments = this.commentRepository.findByPostEntityId(postId);
+        return comments.stream().map(this.commentMapper::toCommentResponse).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public CommentDeletedResponse deleteCommentOfPost(int commentId, Authentication authentication) {
+        var user = (UserEntity) authentication.getPrincipal();
+        var comment = this.commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
+        if(!Objects.equals(comment.getCreatedByUserid().getId(), user.getId()))
+            throw new CantDeleteCommentOfOtherUserException();
+        this.commentRepository.delete(comment);
+        var deleted = this.commentRepository.findById(commentId).isEmpty();
+        return CommentDeletedResponse.builder()
+                .deleted(deleted)
+                .build();
     }
 }

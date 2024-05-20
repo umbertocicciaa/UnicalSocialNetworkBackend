@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/Comment")
@@ -20,6 +22,18 @@ public class CommentRestController {
     @PostMapping(value = "/comments")
     public ResponseEntity<CommentCreatedResponse> createComment(@RequestBody @Valid CommentCreateRequest comment, Authentication request) {
         return ResponseEntity.ok(this.commentService.createComment(comment, request));
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/comments/{post_id}")
+    public ResponseEntity<Collection<CommentResponse>> getComment(@PathVariable int post_id) {
+        return ResponseEntity.ok(this.commentService.getCommentByPostId(post_id));
+    }
+
+    @CrossOrigin
+    @DeleteMapping(value = "/comments/{comment_id}")
+    public ResponseEntity<CommentDeletedResponse> deleteComment(@PathVariable int comment_id, Authentication authentication) {
+        return ResponseEntity.ok(this.commentService.deleteCommentOfPost(comment_id,authentication));
     }
 
 }

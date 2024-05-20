@@ -14,7 +14,17 @@ public class CommentMapperImpl implements CommentMapper{
                 .postId(comment.getPostEntity().getId())
                 .createdDate(comment.getCreatedDatetime())
                 .createdByUserid(comment.getCreatedByUserid().getId())
-                .commentRepliedId(comment.getCommentEntityRepliedTo().getId())
+                .build();
+    }
+
+    @Override
+    public CommentResponse toCommentResponse(CommentEntity comment) {
+        return CommentResponse.builder()
+                .id(comment.getId())
+                .comment(comment.getComment())
+                .createdDatetime(comment.getCreatedDatetime())
+                .createdByUserid(comment.getCreatedByUserid().getId())
+                .postId(comment.getPostEntity().getId())
                 .build();
     }
 }
