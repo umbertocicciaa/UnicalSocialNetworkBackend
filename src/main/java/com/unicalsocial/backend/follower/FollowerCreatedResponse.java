@@ -1,6 +1,5 @@
 package com.unicalsocial.backend.follower;
 
-import com.unicalsocial.backend.user.UserResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

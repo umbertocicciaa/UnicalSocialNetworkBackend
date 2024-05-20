@@ -4,11 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.Hibernate;
-import org.hibernate.annotations.ColumnDefault;
+
 
 import java.io.Serial;
-import java.util.Objects;
+
 
 @Embeddable
 @Data
