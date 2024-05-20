@@ -170,6 +170,19 @@ public class GlobalExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(UtenteGiaPresenteException.class)
+    public ResponseEntity<ExceptionResponse> handleException(UtenteGiaPresenteException exp) {
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(BAD_REQUEST.value())
+                                .businessErrorDescription("L'utente con questo username o email esiste gia")
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception exp) {
         return ResponseEntity

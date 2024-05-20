@@ -1,6 +1,7 @@
 package com.unicalsocial.backend.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.unicalsocial.backend.exception.UtenteGiaPresenteException;
 import com.unicalsocial.backend.security.JwtServiceImpl;
 import com.unicalsocial.backend.token.TokenEntity;
 import com.unicalsocial.backend.token.TokenRepository;
@@ -32,6 +33,12 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
     @Transactional
     public AuthenticationResponse register(RegisterRequest request) {
+        var findUserByUsername = this.repository.findByProfileName(request.getProfilename());
+        if(findUserByUsername.isPresent())
+            throw new UtenteGiaPresenteException();
+        var findUserByEmail = this.repository.findByEmail(request.getEmail());
+        if(findUserByEmail.isPresent())
+            throw new UtenteGiaPresenteException();
         var user = UserEntity.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())

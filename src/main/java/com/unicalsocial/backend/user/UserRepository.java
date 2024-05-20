@@ -33,4 +33,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     Long countUsersByProfileNameContaining(@Param("partialName") String partialName);
 
     Optional<UserEntity> findByProfileName(String username);
+    Optional<UserEntity> findByEmail(String email);
 }
