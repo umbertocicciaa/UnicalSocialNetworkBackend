@@ -1,9 +1,6 @@
 package com.unicalsocial.backend.post;
 
-import com.unicalsocial.backend.exception.PostNotFoundException;
-import com.unicalsocial.backend.exception.PostTypeNotFoundException;
-import com.unicalsocial.backend.exception.UserCantLikeTwoTimeSamePost;
-import com.unicalsocial.backend.exception.UserNotFoundException;
+import com.unicalsocial.backend.exception.*;
 import com.unicalsocial.backend.mipiace.Mipiace;
 import com.unicalsocial.backend.mipiace.MipiaceId;
 import com.unicalsocial.backend.mipiace.MipiaceRepository;
@@ -23,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 
 @Service
@@ -62,7 +60,17 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public TwitCreatedRespose createTwit(TwitCreateRequest request, Authentication authentication) {
-        return null;
+        var user = (UserEntity) authentication.getPrincipal();
+        var postType = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.twit.toString()).orElseThrow(PostTypeNotFoundException::new);
+        var postEntity = PostEntity.builder()
+                .postTypeEntity(postType)
+                .createdByUserid(user)
+                .caption(request.getCaption())
+                .like(0)
+                .version(0)
+                .build();
+        var post = this.postRepository.save(postEntity);
+        return this.postMapper.toTwitCreatedResponse(post);
     }
 
     @Override
@@ -77,9 +85,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDeletedResponse deletePost(long postId) {
-
+    @Transactional
+    public PostDeletedResponse deletePost(long postId,Authentication authentication) {
+        var user = (UserEntity) authentication.getPrincipal();
         var post = this.postRepository.findById(Math.toIntExact(postId)).orElseThrow(PostNotFoundException::new);
+        if(!Objects.equals(post.getCreatedByUserid().getId(), user.getId()))
+            throw new CantDeletePostOfOtherUserException();
         var media = this.postMediaRepository.findByPostEntity(post);
         media.ifPresent(this.postMediaRepository::delete);
         this.postRepository.deleteById(Math.toIntExact(postId));

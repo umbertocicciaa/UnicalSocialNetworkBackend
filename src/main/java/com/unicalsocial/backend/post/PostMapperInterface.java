@@ -7,4 +7,5 @@ public interface PostMapperInterface {
     PostCreatedResponse toPostCreatedResponse(PostEntity post, PostMediaEntity postMedia);
     PostResponse toPostResponseWithImage(PostEntity post, PostMediaEntity postMedia);
     PostResponse toPostResponseNoImage(PostEntity post);
+    TwitCreatedRespose toTwitCreatedResponse(PostEntity post);
 }

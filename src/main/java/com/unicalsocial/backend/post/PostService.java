@@ -8,7 +8,7 @@ import java.util.Collection;
 public interface PostService {
     PostCreatedResponse createPost(PostCreateRequest request, Authentication authentication);
     PostResponse getPostById(Long id);
-    PostDeletedResponse deletePost(long postId);
+    PostDeletedResponse deletePost(long postId, Authentication authentication);
     Collection<PostResponse> getPostOrderedByDateDesc(int page);
     PostByUserResponse countPostByUserId(long userId);
     Collection<PostResponse> getPostOfTypePostByUserId(int page,int user_id);

@@ -59,8 +59,8 @@ public class PostRestController {
 
     @CrossOrigin
     @DeleteMapping(value = "/posts/{postId}")
-    public ResponseEntity<PostDeletedResponse> deletePost(@PathVariable long postId) {
-        return ResponseEntity.ok(this.postService.deletePost(postId));
+    public ResponseEntity<PostDeletedResponse> deletePost(@PathVariable long postId,Authentication authentication) {
+        return ResponseEntity.ok(this.postService.deletePost(postId,authentication));
     }
 
     @CrossOrigin

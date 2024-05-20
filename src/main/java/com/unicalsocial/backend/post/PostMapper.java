@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class PostMapper implements PostMapperInterface{
+public class PostMapper implements PostMapperInterface {
 
     @Override
     public PostCreatedResponse toPostCreatedResponse(PostEntity post, PostMediaEntity postMedia) {
@@ -41,6 +41,17 @@ public class PostMapper implements PostMapperInterface{
                 .postType(post.getPostTypeEntity().getPostTypeName())
                 .like(post.getLike())
                 .userId(post.getCreatedByUserid().getId())
+                .build();
+    }
+
+    @Override
+    public TwitCreatedRespose toTwitCreatedResponse(PostEntity post) {
+        return TwitCreatedRespose.builder()
+                .id(post.getId())
+                .caption(post.getCaption())
+                .like(post.getLike())
+                .userId(post.getCreatedByUserid().getId())
+                .postId(post.getId())
                 .build();
     }
 }
