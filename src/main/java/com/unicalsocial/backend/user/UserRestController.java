@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -18,6 +20,7 @@ public class UserRestController {
     private final UserService userService;
 
     @CrossOrigin
+    @PreAuthorize("hasRole('ADMIN') || hasRole('MANAGER')")
     @GetMapping(value = "/users")
     public ResponseEntity<Collection<UserResponse>> getUsers() {
         var users= this.userService.getAllUser();
@@ -52,9 +55,14 @@ public class UserRestController {
 
     @CrossOrigin
     @GetMapping(value = "/total-users")
-    public ResponseEntity<Long> getTotalUsers(@RequestParam("username")String username) {
+    public ResponseEntity<UserCountResponse> getTotalUsers(@RequestParam("username")String username) {
         return ResponseEntity.ok(this.userService.countAllUsersLikeUsername(username));
     }
 
+    @CrossOrigin
+    @GetMapping(value = "/logged-users")
+    public ResponseEntity<UserResponse> getLoggedUsers(Authentication authentication) {
+        return ResponseEntity.ok(this.userService.getLoggedUser(authentication));
+    }
 
 }

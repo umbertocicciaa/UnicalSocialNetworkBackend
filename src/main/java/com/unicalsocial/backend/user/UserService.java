@@ -1,6 +1,8 @@
 package com.unicalsocial.backend.user;
 
 
+import org.springframework.security.core.Authentication;
+
 import java.util.Collection;
 
 public interface UserService {
@@ -9,5 +11,6 @@ public interface UserService {
     UserResponse getUserById(long id);
     UserResponse getUserByUsername(String username);
     Collection<UserResponse> getUserLikeUsername(String username,int page);
-    Long countAllUsersLikeUsername(String username);
+    UserCountResponse countAllUsersLikeUsername(String username);
+    UserResponse getLoggedUser(Authentication authentication);
 }
