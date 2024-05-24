@@ -7,6 +7,7 @@ import com.unicalsocial.backend.post.PostRepository;
 import com.unicalsocial.backend.user.UserEntity;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
                     .build();
             var persistedComment = this.commentRepository.save(comment);
             return this.commentMapper.toCommentCreatedResponse(persistedComment);
-        }
+        }else{
         var comment = CommentEntity.builder()
                 .comment(commentReq.getComment())
                 .createdByUserid(user)
@@ -47,12 +48,15 @@ public class CommentServiceImpl implements CommentService {
                 .build();
         var persistedComment = this.commentRepository.save(comment);
         return this.commentMapper.toCommentCreatedResponse(persistedComment);
+        }
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Collection<CommentResponse> getCommentByPostId(int postId) {
-        var comments = this.commentRepository.findByPostEntityId(postId);
+    public Collection<CommentResponse> getCommentByPostId(int postId,int page) {
+        final var pageSize = 15;
+        final var pageable = PageRequest.of(page, pageSize);
+        var comments = this.commentRepository.findByPostEntityId(postId,pageable);
         return comments.stream().map(this.commentMapper::toCommentResponse).collect(Collectors.toList());
     }
 

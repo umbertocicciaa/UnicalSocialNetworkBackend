@@ -26,8 +26,8 @@ public class CommentRestController {
 
     @CrossOrigin
     @GetMapping(value = "/comments/{post_id}")
-    public ResponseEntity<Collection<CommentResponse>> getComment(@PathVariable int post_id) {
-        return ResponseEntity.ok(this.commentService.getCommentByPostId(post_id));
+    public ResponseEntity<Collection<CommentResponse>> getComment(@PathVariable int post_id,@RequestParam(defaultValue = "0")int page) {
+        return ResponseEntity.ok(this.commentService.getCommentByPostId(post_id,page));
     }
 
     @CrossOrigin
