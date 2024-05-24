@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -71,6 +72,30 @@ public class PostServiceImpl implements PostService {
                 .build();
         var post = this.postRepository.save(postEntity);
         return this.postMapper.toTwitCreatedResponse(post);
+    }
+
+    @Override
+    public Collection<PostResponse> getPostOfTypePost(int page) {
+        final var size = 50;
+        final var pageable = PageRequest.of(page, size);
+        var postType = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.post.toString()).orElseThrow(PostTypeNotFoundException::new);
+        var posts = this.postRepository.findAllByPostTypeEntityOrderByCreateDatetimeDesc(postType,pageable);
+        var postsRes = new ArrayList<PostResponse>();
+        for(var post : posts) {
+            var postMedia = this.postMediaRepository.findByPostEntity(post);
+            postMedia.ifPresent(postMediaEntity -> postsRes.add(this.postMapper.toPostResponseWithImage(post, postMediaEntity)));
+            postsRes.add(this.postMapper.toPostResponseNoImage(post));
+        }
+        return postsRes;
+    }
+
+    @Override
+    public Collection<PostResponse> getPostOfTypeTwit(int page) {
+        final var size = 20;
+        final var pageable = PageRequest.of(page, size);
+        var postType = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.twit.toString()).orElseThrow(PostTypeNotFoundException::new);
+        var posts = this.postRepository.findAllByPostTypeEntityOrderByCreateDatetimeDesc(postType,pageable);
+        return posts.stream().map(postMapper::toPostResponseNoImage).collect(Collectors.toList());
     }
 
     @Override

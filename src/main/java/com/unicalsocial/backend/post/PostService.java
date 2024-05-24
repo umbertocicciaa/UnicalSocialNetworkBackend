@@ -16,4 +16,6 @@ public interface PostService {
     PostCountResponse countAllPost();
     PostResponse addLike(AddLikeRequest request, Authentication authentication);
     TwitCreatedRespose createTwit(TwitCreateRequest request, Authentication authentication);
+    Collection<PostResponse> getPostOfTypePost(int page);
+    Collection<PostResponse> getPostOfTypeTwit(int page);
 }

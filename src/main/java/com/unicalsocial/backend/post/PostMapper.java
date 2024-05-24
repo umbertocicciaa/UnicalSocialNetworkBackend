@@ -29,7 +29,11 @@ public class PostMapper implements PostMapperInterface {
                 .like(post.getLike())
                 .postType(post.getPostTypeEntity().getPostTypeName())
                 .image(postMedia.getMediaFile())
-                .userId(post.getCreatedByUserid().getId())
+                .user(UserPostResponse.builder()
+                                .id(post.getCreatedByUserid().getId())
+                                .profileName(post.getCreatedByUserid().getProfileName())
+                                .profilePicture(post.getCreatedByUserid().getProfilePicture())
+                                .build())
                 .build();
     }
 
@@ -40,7 +44,11 @@ public class PostMapper implements PostMapperInterface {
                 .caption(post.getCaption())
                 .postType(post.getPostTypeEntity().getPostTypeName())
                 .like(post.getLike())
-                .userId(post.getCreatedByUserid().getId())
+                .user(UserPostResponse.builder()
+                        .id(post.getCreatedByUserid().getId())
+                        .profileName(post.getCreatedByUserid().getProfileName())
+                        .profilePicture(post.getCreatedByUserid().getProfilePicture())
+                        .build())
                 .build();
     }
 
