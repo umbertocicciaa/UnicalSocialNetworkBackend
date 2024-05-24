@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public Collection<UserResponse> getUserLikeUsername(String username, int page) {
-        final var pageSize = 10;
+        final var pageSize = 25;
         final var offset = (page) * pageSize;
         var users = this.userRepository.findAllByProfileNameContainingOrderedByFollowerCount(username, pageSize, offset);
         return users.stream().map(userMapper::toUserResponse).toList();
