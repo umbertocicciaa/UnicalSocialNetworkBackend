@@ -13,4 +13,5 @@ public interface UserService {
     Collection<UserResponse> getUserLikeUsername(String username,int page);
     UserCountResponse countAllUsersLikeUsername(String username);
     UserResponse getLoggedUser(Authentication authentication);
+    UserResponse updateUser(UpdateUserRequest userUpdateRequest, Authentication authentication);
 }

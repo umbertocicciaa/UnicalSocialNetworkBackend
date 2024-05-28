@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserCountResponse countAllUsersLikeUsername(String username) {
         return UserCountResponse.builder()
                 .count(this.userRepository.countUsersByProfileNameContaining(username))
@@ -58,8 +59,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserResponse getLoggedUser(Authentication authentication) {
         var user = (UserEntity) authentication.getPrincipal();
         return this.userMapper.toUserResponse(user);
+    }
+
+    @Override
+    @Transactional
+    public UserResponse updateUser(UpdateUserRequest userUpdateRequest, Authentication authentication) {
+        var user = (UserEntity) authentication.getPrincipal();
+        if(user==null)
+            throw new UserNotFoundException();
+        if(userUpdateRequest.getFirstName()!=null && !userUpdateRequest.getFirstName().isEmpty())
+            user.setFirstname(userUpdateRequest.getFirstName());
+        if(userUpdateRequest.getLastName()!=null && !userUpdateRequest.getLastName().isEmpty())
+            user.setLastname(userUpdateRequest.getLastName());
+        if(userUpdateRequest.getEmail()!=null && !userUpdateRequest.getEmail().isEmpty())
+            user.setEmail(userUpdateRequest.getEmail());
+        if(userUpdateRequest.getBio()!=null && !userUpdateRequest.getBio().isEmpty())
+            user.setBio(userUpdateRequest.getBio());
+        if(userUpdateRequest.getPhoto()!=null && userUpdateRequest.getPhoto().length>0)
+            user.setProfilePicture(userUpdateRequest.getPhoto());
+        var savedUser = this.userRepository.save(user);
+        return this.userMapper.toUserResponse(savedUser);
     }
 }

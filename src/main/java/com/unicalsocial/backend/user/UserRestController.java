@@ -1,5 +1,6 @@
 package com.unicalsocial.backend.user;
 
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -52,6 +53,11 @@ public class UserRestController {
         return ResponseEntity.ok(this.userService.getAllUserOrderedBySignUpDate());
     }
 
+    @CrossOrigin
+    @PutMapping(value = "/users/username")
+    public ResponseEntity<UserResponse> updateProfileUser(@RequestBody UpdateUserRequest userUpdateRequest, Authentication authentication){
+        return ResponseEntity.ok(this.userService.updateUser(userUpdateRequest,authentication));
+    }
 
     @CrossOrigin
     @GetMapping(value = "/total-users")
