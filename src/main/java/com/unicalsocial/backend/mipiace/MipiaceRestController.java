@@ -17,7 +17,6 @@ public class MipiaceRestController {
     private final MipiaceService mipiaceService;
 
     @GetMapping(value = "/mipiace/{post_Id}")
-    @CrossOrigin
     public ResponseEntity<EsisteMipiaceResponse> exists(@PathVariable("post_Id") int post_Id, Authentication authentication) {
         return ResponseEntity.ok(this.mipiaceService.existMipiace(post_Id,authentication));
     }

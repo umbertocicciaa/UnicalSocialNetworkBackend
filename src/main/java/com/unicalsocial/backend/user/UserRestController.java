@@ -19,7 +19,7 @@ public class UserRestController {
 
     private final UserService userService;
 
-    @CrossOrigin
+
     @PreAuthorize("hasRole('ADMIN') || hasRole('MANAGER')")
     @GetMapping(value = "/users")
     public ResponseEntity<Collection<UserResponse>> getUsers() {
@@ -27,44 +27,44 @@ public class UserRestController {
         return ResponseEntity.ok(users);
     }
 
-    @CrossOrigin
+
     @GetMapping(value = "/users/{id}")
     public ResponseEntity<UserResponse> getUsersById(@PathVariable int id) {
         return ResponseEntity.ok(this.userService.getUserById(id));
 
     }
 
-    @CrossOrigin
+
     @GetMapping(value = "/users/username")
     public ResponseEntity<Collection<UserResponse>> getUserLikeUsername(@RequestParam("username") String username, @RequestParam(defaultValue = "0")int page) {
         return ResponseEntity.ok(this.userService.getUserLikeUsername(username,page));
     }
 
-    @CrossOrigin
+
     @GetMapping(value = "/users/username/{username}")
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String username) {
         return ResponseEntity.ok(this.userService.getUserByUsername(username));
     }
 
-    @CrossOrigin
+
     @GetMapping(value = "/ordered-users")
     public ResponseEntity<Collection<UserResponse>> getUsersOrderedBySignUp() {
         return ResponseEntity.ok(this.userService.getAllUserOrderedBySignUpDate());
     }
 
-    @CrossOrigin
+
     @PutMapping(value = "/users/username")
     public ResponseEntity<UserResponse> updateProfileUser(@RequestBody UpdateUserRequest userUpdateRequest, Authentication authentication){
         return ResponseEntity.ok(this.userService.updateUser(userUpdateRequest,authentication));
     }
 
-    @CrossOrigin
+
     @GetMapping(value = "/total-users")
     public ResponseEntity<UserCountResponse> getTotalUsers(@RequestParam("username")String username) {
         return ResponseEntity.ok(this.userService.countAllUsersLikeUsername(username));
     }
 
-    @CrossOrigin
+
     @GetMapping(value = "/logged-users")
     public ResponseEntity<UserResponse> getLoggedUsers(Authentication authentication) {
         return ResponseEntity.ok(this.userService.getLoggedUser(authentication));

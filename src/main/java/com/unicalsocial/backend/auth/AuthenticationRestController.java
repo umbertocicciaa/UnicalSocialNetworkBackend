@@ -19,7 +19,6 @@ public class AuthenticationRestController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    @CrossOrigin
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody @Valid RegisterRequest request
     ) {
@@ -27,7 +26,6 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/authenticate")
-    @CrossOrigin
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody @Valid AuthenticationRequest request
     ) {
@@ -35,7 +33,6 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("/refresh-token")
-    @CrossOrigin
     public void refreshToken(
             HttpServletRequest request,
             HttpServletResponse response

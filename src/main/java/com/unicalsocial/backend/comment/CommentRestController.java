@@ -18,19 +18,19 @@ import java.util.Collection;
 public class CommentRestController {
     private final CommentService commentService;
 
-    @CrossOrigin
+
     @PostMapping(value = "/comments")
     public ResponseEntity<CommentCreatedResponse> createComment(@RequestBody @Valid CommentCreateRequest comment, Authentication request) {
         return ResponseEntity.ok(this.commentService.createComment(comment, request));
     }
 
-    @CrossOrigin
+
     @GetMapping(value = "/comments/{post_id}")
     public ResponseEntity<Collection<CommentResponse>> getComment(@PathVariable int post_id,@RequestParam(defaultValue = "0")int page) {
         return ResponseEntity.ok(this.commentService.getCommentByPostId(post_id,page));
     }
 
-    @CrossOrigin
+
     @DeleteMapping(value = "/comments/{comment_id}")
     public ResponseEntity<CommentDeletedResponse> deleteComment(@PathVariable int comment_id, Authentication authentication) {
         return ResponseEntity.ok(this.commentService.deleteCommentOfPost(comment_id,authentication));

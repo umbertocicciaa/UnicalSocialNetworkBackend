@@ -21,73 +21,64 @@ public class PostRestController {
 
     private final PostService postService;
 
-    @CrossOrigin
     @GetMapping(value = "/posts")
     public ResponseEntity<Collection<PostResponse>> getPosts(@RequestParam(defaultValue = "0") int page) {
         return ResponseEntity.ok(this.postService.getPostOrderedByDateDesc(page));
     }
 
-    @CrossOrigin
+
     @GetMapping(value = "/posts/{id}")
     public ResponseEntity<PostResponse> getPostsById(@PathVariable long id) {
         return ResponseEntity.ok(this.postService.getPostById(id));
     }
 
-    @CrossOrigin
     @GetMapping(value = "/posts/posts")
     public ResponseEntity<Collection<PostResponse>> getPostsOfTypePost(@RequestParam(defaultValue = "0") int page) {
         return ResponseEntity.ok(this.postService.getPostOfTypePost(page));
     }
 
-    @CrossOrigin
     @GetMapping(value = "/posts/posts/{user_id}")
     public ResponseEntity<Collection<PostResponse>> getPostsOfTypePostByUser(@RequestParam(defaultValue = "0") int page, @PathVariable int user_id) {
         return ResponseEntity.ok(this.postService.getPostOfTypePostByUserId(page, user_id));
     }
 
-    @CrossOrigin
     @GetMapping(value = "/posts/posts-followings")
     public ResponseEntity<Collection<PostResponse>> getPostsOfTypePostFollowings(Authentication authentication, @RequestParam(defaultValue = "0") int page) {
         return ResponseEntity.ok(this.postService.getPostsOfTypePostFollowings(authentication,page));
     }
 
-    @CrossOrigin
     @GetMapping(value = "/posts/twits")
     public ResponseEntity<Collection<PostResponse>> getPostsOfTypeTwits(@RequestParam(defaultValue = "0") int page) {
         return ResponseEntity.ok(this.postService.getPostOfTypeTwit(page));
     }
 
-    @CrossOrigin
     @GetMapping(value = "/posts/twits/{user_id}")
     public ResponseEntity<Collection<PostResponse>> getPostsOfTypeTwitByUser(@RequestParam(defaultValue = "0") int page, @PathVariable int user_id) {
         return ResponseEntity.ok(this.postService.getPostsOfTypeTwitByUserId(page, user_id));
     }
 
-    @CrossOrigin
     @GetMapping(value = "/posts/twits-followings")
     public ResponseEntity<Collection<PostResponse>> getPostsOfTypeTwitFollowings(Authentication authentication,@RequestParam(defaultValue = "0") int page) {
         return ResponseEntity.ok(this.postService.getPostsOfTwitPostFollowings(authentication,page));
     }
 
-    @CrossOrigin
     @PostMapping(value = "/posts/posts")
     public ResponseEntity<PostCreatedResponse> createPost(@RequestBody @Valid PostCreateRequest request,Authentication authentication) {
         return ResponseEntity.ok(this.postService.createPost(request,authentication));
     }
 
-    @CrossOrigin
     @PostMapping(value = "/posts/twits")
     public ResponseEntity<TwitCreatedRespose> createTwit(@RequestBody @Valid TwitCreateRequest request, Authentication authentication) {
         return ResponseEntity.ok(this.postService.createTwit(request,authentication));
     }
 
-    @CrossOrigin
+
     @DeleteMapping(value = "/posts/{postId}")
     public ResponseEntity<PostDeletedResponse> deletePost(@PathVariable long postId,Authentication authentication) {
         return ResponseEntity.ok(this.postService.deletePost(postId,authentication));
     }
 
-    @CrossOrigin
+
     @PutMapping(value = "/posts/posts/likes")
     public ResponseEntity<PostResponse> addLike(@RequestBody @Valid AddLikeRequest request,Authentication authentication) {
         var remainingRetries = 3;
@@ -104,13 +95,12 @@ public class PostRestController {
         return ResponseEntity.internalServerError().build();
     }
 
-    @CrossOrigin
+
     @GetMapping(value = "/total-posts/{user_id}")
     public ResponseEntity<PostByUserResponse> countPostsByUserId(@PathVariable long user_id) {
         return ResponseEntity.ok(this.postService.countPostByUserId(user_id));
     }
 
-    @CrossOrigin
     @GetMapping(value = "/total-posts")
     public ResponseEntity<PostCountResponse> getPostsTotal() {
         return ResponseEntity.ok(this.postService.countAllPost());
