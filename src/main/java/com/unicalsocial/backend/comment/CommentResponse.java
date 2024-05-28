@@ -13,7 +13,7 @@ import java.time.Instant;
 @Builder
 public class CommentResponse {
     private Integer id;
-    private Integer createdByUserid;
+    private CommentUserResponse createdByUserid;
     private Integer postId;
     private Instant createdDatetime;
     private String comment;

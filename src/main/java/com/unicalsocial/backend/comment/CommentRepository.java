@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 @Hidden
 public interface CommentRepository extends JpaRepository<CommentEntity,Integer> {
-    Slice<CommentEntity> findByPostEntityId(int postId, Pageable pageable);
+    Slice<CommentEntity> findByPostEntityIdOrderByCreatedDatetime(int postId, Pageable pageable);
 }

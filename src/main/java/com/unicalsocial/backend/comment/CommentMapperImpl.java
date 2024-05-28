@@ -3,7 +3,7 @@ package com.unicalsocial.backend.comment;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommentMapperImpl implements CommentMapper{
+public class CommentMapperImpl implements CommentMapper {
 
 
     @Override
@@ -23,7 +23,11 @@ public class CommentMapperImpl implements CommentMapper{
                 .id(comment.getId())
                 .comment(comment.getComment())
                 .createdDatetime(comment.getCreatedDatetime())
-                .createdByUserid(comment.getCreatedByUserid().getId())
+                .createdByUserid(CommentUserResponse.builder()
+                        .userId(comment.getCreatedByUserid().getId())
+                        .avatar(comment.getCreatedByUserid().getProfilePicture())
+                        .username(comment.getCreatedByUserid().getProfileName())
+                        .build())
                 .postId(comment.getPostEntity().getId())
                 .build();
     }

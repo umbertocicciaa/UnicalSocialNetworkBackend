@@ -31,16 +31,6 @@ public class CommentServiceImpl implements CommentService {
     public CommentCreatedResponse createComment(CommentCreateRequest commentReq, Authentication authentication) {
         var user = (UserEntity) authentication.getPrincipal();
         var post = this.postRepository.findById(commentReq.getPostId()).orElseThrow(PostNotFoundException::new);
-        var commentToReply = this.commentRepository.findById(commentReq.getCommentRepliedId());
-        if(commentToReply.isPresent()) {
-            var comment = CommentEntity.builder()
-                    .comment(commentReq.getComment())
-                    .createdByUserid(user)
-                    .postEntity(post)
-                    .build();
-            var persistedComment = this.commentRepository.save(comment);
-            return this.commentMapper.toCommentCreatedResponse(persistedComment);
-        }else{
         var comment = CommentEntity.builder()
                 .comment(commentReq.getComment())
                 .createdByUserid(user)
@@ -48,15 +38,15 @@ public class CommentServiceImpl implements CommentService {
                 .build();
         var persistedComment = this.commentRepository.save(comment);
         return this.commentMapper.toCommentCreatedResponse(persistedComment);
-        }
+
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Collection<CommentResponse> getCommentByPostId(int postId,int page) {
+    public Collection<CommentResponse> getCommentByPostId(int postId, int page) {
         final var pageSize = 15;
         final var pageable = PageRequest.of(page, pageSize);
-        var comments = this.commentRepository.findByPostEntityId(postId,pageable);
+        var comments = this.commentRepository.findByPostEntityIdOrderByCreatedDatetime(postId, pageable);
         return comments.stream().map(this.commentMapper::toCommentResponse).collect(Collectors.toList());
     }
 
@@ -65,7 +55,7 @@ public class CommentServiceImpl implements CommentService {
     public CommentDeletedResponse deleteCommentOfPost(int commentId, Authentication authentication) {
         var user = (UserEntity) authentication.getPrincipal();
         var comment = this.commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-        if(!Objects.equals(comment.getCreatedByUserid().getId(), user.getId()))
+        if (!Objects.equals(comment.getCreatedByUserid().getId(), user.getId()))
             throw new CantDeleteCommentOfOtherUserException();
         this.commentRepository.delete(comment);
         var deleted = this.commentRepository.findById(commentId).isEmpty();
