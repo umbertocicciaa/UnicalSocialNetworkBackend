@@ -40,9 +40,15 @@ public class PostRestController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/posts/{user_id}/posts")
+    @GetMapping(value = "/posts/posts/{user_id}")
     public ResponseEntity<Collection<PostResponse>> getPostsOfTypePostByUser(@RequestParam(defaultValue = "0") int page, @PathVariable int user_id) {
         return ResponseEntity.ok(this.postService.getPostOfTypePostByUserId(page, user_id));
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/posts/posts-followings")
+    public ResponseEntity<Collection<PostResponse>> getPostsOfTypePostFollowings(Authentication authentication, @RequestParam(defaultValue = "0") int page) {
+        return ResponseEntity.ok(this.postService.getPostsOfTypePostFollowings(authentication,page));
     }
 
     @CrossOrigin
@@ -52,9 +58,15 @@ public class PostRestController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/posts/{user_id}/twits")
+    @GetMapping(value = "/posts/twits/{user_id}")
     public ResponseEntity<Collection<PostResponse>> getPostsOfTypeTwitByUser(@RequestParam(defaultValue = "0") int page, @PathVariable int user_id) {
         return ResponseEntity.ok(this.postService.getPostsOfTypeTwitByUserId(page, user_id));
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/posts/twits-followings")
+    public ResponseEntity<Collection<PostResponse>> getPostsOfTypeTwitFollowings(Authentication authentication,@RequestParam(defaultValue = "0") int page) {
+        return ResponseEntity.ok(this.postService.getPostsOfTwitPostFollowings(authentication,page));
     }
 
     @CrossOrigin

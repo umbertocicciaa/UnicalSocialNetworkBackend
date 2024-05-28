@@ -99,6 +99,28 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Collection<PostResponse> getPostsOfTypePostFollowings(Authentication authentication,int page) {
+        var user = (UserEntity) authentication.getPrincipal();
+        if(user==null)
+            throw new UserNotFoundException();
+        final var size = 20;
+        final var pageable = PageRequest.of(page, size);
+        var postType = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.post.toString()).orElseThrow(PostTypeNotFoundException::new);
+        return this.postRepository.findPostsByPostTypeAndFollowedUsers(postType.getId(), user.getId(),pageable).stream().map(postMapper::toPostResponseNoImage).collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<PostResponse> getPostsOfTwitPostFollowings(Authentication authentication,int page) {
+        var user = (UserEntity) authentication.getPrincipal();
+        if(user==null)
+            throw new UserNotFoundException();
+        final var size = 20;
+        final var pageable = PageRequest.of(page, size);
+        var postType = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.twit.toString()).orElseThrow(PostTypeNotFoundException::new);
+        return this.postRepository.findPostsByPostTypeAndFollowedUsers(postType.getId(), user.getId(),pageable).stream().map(postMapper::toPostResponseNoImage).collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public PostResponse getPostById(Long id) {
         var postId = Math.toIntExact(id);

@@ -18,4 +18,6 @@ public interface PostService {
     TwitCreatedRespose createTwit(TwitCreateRequest request, Authentication authentication);
     Collection<PostResponse> getPostOfTypePost(int page);
     Collection<PostResponse> getPostOfTypeTwit(int page);
+    Collection<PostResponse> getPostsOfTypePostFollowings(Authentication authentication,int page);
+    Collection<PostResponse> getPostsOfTwitPostFollowings(Authentication authentication,int page);
 }
