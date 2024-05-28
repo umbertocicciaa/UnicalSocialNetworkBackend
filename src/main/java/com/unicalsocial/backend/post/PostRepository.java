@@ -16,14 +16,15 @@ public interface PostRepository extends JpaRepository<PostEntity, Integer> {
 
     Slice<PostEntity> findAllByPostTypeEntityAndCreatedByUseridOrderByCreateDatetimeDesc(@NotNull PostTypeEntity postTypeEntity, @NotNull UserEntity createdByUserid, Pageable pageable);
 
-    Slice<PostEntity> findAllByPostTypeEntityOrderByCreateDatetimeDesc(PostTypeEntity postTypeEntity, Pageable pageable);
+    Slice<PostEntity> findAllByPostTypeEntityOrderByLikeDesc(PostTypeEntity postTypeEntity, Pageable pageable);
 
     @Query("SELECT p FROM PostEntity p " +
             "WHERE p.postTypeEntity.id = :postTypeId " +
             "AND p.createdByUserid.id IN (" +
             "   SELECT f.id.followingUserId " +
             "   FROM FollowerEntity f " +
-            "   WHERE f.id.followerUserId = :userId)")
+            "   WHERE f.id.followerUserId = :userId) " +
+            "ORDER BY p.like DESC")
     Slice<PostEntity> findPostsByPostTypeAndFollowedUsers(
             @Param("postTypeId") Integer postTypeId,
             @Param("userId") Integer userId,
