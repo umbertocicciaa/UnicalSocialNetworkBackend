@@ -138,6 +138,7 @@ public class PostServiceImpl implements PostService {
         var post = this.postRepository.findById(Math.toIntExact(postId)).orElseThrow(PostNotFoundException::new);
         if(!Objects.equals(post.getCreatedByUserid().getId(), user.getId()))
             throw new CantDeletePostOfOtherUserException();
+        this.mipiaceRepository.deleteMipiaceByPostId(post.getId());
         var media = this.postMediaRepository.findByPostEntity(post);
         media.ifPresent(this.postMediaRepository::delete);
         this.postRepository.deleteById(Math.toIntExact(postId));

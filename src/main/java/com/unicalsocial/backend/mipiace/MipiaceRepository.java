@@ -7,4 +7,5 @@ import org.springframework.transaction.annotation.Transactional;
 @Hidden
 @Transactional
 public interface MipiaceRepository extends JpaRepository<Mipiace,MipiaceId> {
+    void deleteMipiaceByPostId(Integer post_id);
 }
