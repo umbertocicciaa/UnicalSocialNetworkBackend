@@ -13,7 +13,13 @@ public class CommentMapperImpl implements CommentMapper {
                 .comment(comment.getComment())
                 .postId(comment.getPostEntity().getId())
                 .createdDate(comment.getCreatedDatetime())
-                .createdByUserid(comment.getCreatedByUserid().getId())
+                .createdByUserid(
+                        CommentUserResponse.builder()
+                                .username(comment.getCreatedByUserid().getUsername())
+                                .avatar(comment.getCreatedByUserid().getProfilePicture())
+                                .userId(comment.getCreatedByUserid().getId())
+                                .build()
+                )
                 .build();
     }
 

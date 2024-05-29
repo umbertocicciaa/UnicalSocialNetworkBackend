@@ -14,7 +14,7 @@ import java.time.Instant;
 public class CommentCreatedResponse {
     private Integer id;
     private Integer commentRepliedId;
-    private Integer createdByUserid;
+    private CommentUserResponse createdByUserid;
     private Integer postId;
     private Instant createdDate;
     private String comment;
