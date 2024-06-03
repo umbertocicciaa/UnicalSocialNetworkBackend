@@ -1,5 +1,6 @@
 package com.unicalsocial.backend.post;
 
+import com.unicalsocial.backend.comment.CommentRepository;
 import com.unicalsocial.backend.exception.*;
 import com.unicalsocial.backend.mipiace.Mipiace;
 import com.unicalsocial.backend.mipiace.MipiaceId;
@@ -36,6 +37,7 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final PostTypeRepository postTypeRepository;
     private final PostMapperInterface postMapper;
+    private final CommentRepository commentRepository;
 
     @Override
     @Transactional
@@ -79,7 +81,7 @@ public class PostServiceImpl implements PostService {
         final var size = 50;
         final var pageable = PageRequest.of(page, size);
         var postType = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.post.toString()).orElseThrow(PostTypeNotFoundException::new);
-        var posts = this.postRepository.findAllByPostTypeEntityOrderByLikeDesc(postType,pageable);
+        var posts = this.postRepository.findAllByPostTypeEntityOrderByLikeDesc(postType, pageable);
         return getPostResponses(posts);
     }
 
@@ -88,21 +90,21 @@ public class PostServiceImpl implements PostService {
         final var size = 20;
         final var pageable = PageRequest.of(page, size);
         var postType = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.twit.toString()).orElseThrow(PostTypeNotFoundException::new);
-        var posts = this.postRepository.findAllByPostTypeEntityOrderByLikeDesc(postType,pageable);
+        var posts = this.postRepository.findAllByPostTypeEntityOrderByLikeDesc(postType, pageable);
         return posts.stream().map(postMapper::toPostResponseNoImage).collect(Collectors.toList());
     }
 
     @Override
-    public Collection<PostResponse> getPostsOfTypePostFollowings(Authentication authentication,int page) {
+    public Collection<PostResponse> getPostsOfTypePostFollowings(Authentication authentication, int page) {
         var user = (UserEntity) authentication.getPrincipal();
-        if(user==null)
+        if (user == null)
             throw new UserNotFoundException();
         final var size = 20;
         final var pageable = PageRequest.of(page, size);
         var postType = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.post.toString()).orElseThrow(PostTypeNotFoundException::new);
-        var postResEntity= this.postRepository.findPostsByPostTypeAndFollowedUsers(postType.getId(), user.getId(),pageable);
+        var postResEntity = this.postRepository.findPostsByPostTypeAndFollowedUsers(postType.getId(), user.getId(), pageable);
         var postResponseResult = new ArrayList<PostResponse>();
-        for(var post : postResEntity){
+        for (var post : postResEntity) {
             var postMedia = this.postMediaRepository.findByPostEntity(post);
             postMedia.ifPresent(postMediaEntity -> postResponseResult.add(this.postMapper.toPostResponseWithImage(post, postMediaEntity)));
         }
@@ -110,14 +112,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Collection<PostResponse> getPostsOfTwitPostFollowings(Authentication authentication,int page) {
+    public Collection<PostResponse> getPostsOfTwitPostFollowings(Authentication authentication, int page) {
         var user = (UserEntity) authentication.getPrincipal();
-        if(user==null)
+        if (user == null)
             throw new UserNotFoundException();
         final var size = 20;
         final var pageable = PageRequest.of(page, size);
         var postType = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.twit.toString()).orElseThrow(PostTypeNotFoundException::new);
-        return this.postRepository.findPostsByPostTypeAndFollowedUsers(postType.getId(), user.getId(),pageable).stream().map(postMapper::toPostResponseNoImage).collect(Collectors.toList());
+        return this.postRepository.findPostsByPostTypeAndFollowedUsers(postType.getId(), user.getId(), pageable).stream().map(postMapper::toPostResponseNoImage).collect(Collectors.toList());
     }
 
     @Override
@@ -133,14 +135,15 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public PostDeletedResponse deletePost(long postId,Authentication authentication) {
+    public PostDeletedResponse deletePost(long postId, Authentication authentication) {
         var user = (UserEntity) authentication.getPrincipal();
         var post = this.postRepository.findById(Math.toIntExact(postId)).orElseThrow(PostNotFoundException::new);
-        if(!Objects.equals(post.getCreatedByUserid().getId(), user.getId()))
+        if (!Objects.equals(post.getCreatedByUserid().getId(), user.getId()))
             throw new CantDeletePostOfOtherUserException();
         this.mipiaceRepository.deleteMipiaceByPostId(post.getId());
         var media = this.postMediaRepository.findByPostEntity(post);
         media.ifPresent(this.postMediaRepository::delete);
+        this.commentRepository.deleteByPostEntityId((int) postId);
         this.postRepository.deleteById(Math.toIntExact(postId));
         return new PostDeletedResponse(this.postRepository.findById(Math.toIntExact(postId)).isEmpty());
     }
