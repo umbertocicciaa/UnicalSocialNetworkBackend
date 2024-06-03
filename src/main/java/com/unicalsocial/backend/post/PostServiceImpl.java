@@ -80,13 +80,7 @@ public class PostServiceImpl implements PostService {
         final var pageable = PageRequest.of(page, size);
         var postType = this.postTypeRepository.findByPostTypeName(PostTypeStringEnum.post.toString()).orElseThrow(PostTypeNotFoundException::new);
         var posts = this.postRepository.findAllByPostTypeEntityOrderByLikeDesc(postType,pageable);
-        var postsRes = new ArrayList<PostResponse>();
-        for(var post : posts) {
-            var postMedia = this.postMediaRepository.findByPostEntity(post);
-            postMedia.ifPresent(postMediaEntity -> postsRes.add(this.postMapper.toPostResponseWithImage(post, postMediaEntity)));
-            postsRes.add(this.postMapper.toPostResponseNoImage(post));
-        }
-        return postsRes;
+        return getPostResponses(posts);
     }
 
     @Override
