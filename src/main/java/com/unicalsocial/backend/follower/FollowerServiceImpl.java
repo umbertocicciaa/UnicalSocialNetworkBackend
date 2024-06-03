@@ -4,14 +4,20 @@ import com.unicalsocial.backend.exception.CantFollowSameUserException;
 import com.unicalsocial.backend.exception.CantFollowTwoTimeSameUser;
 import com.unicalsocial.backend.exception.UserNotFoundException;
 import com.unicalsocial.backend.user.UserEntity;
+import com.unicalsocial.backend.user.UserMapperInterface;
 import com.unicalsocial.backend.user.UserRepository;
+import com.unicalsocial.backend.user.UserResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -22,6 +28,7 @@ public class FollowerServiceImpl implements FollowerService {
     private final FollowerRepository followerRepository;
     private final UserRepository userRepository;
     private final FollowerMapper followerMapper;
+    private final UserMapperInterface userMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -70,5 +77,17 @@ public class FollowerServiceImpl implements FollowerService {
         return IsFollowingResponse.builder()
                 .isFollowing(isFollowing)
                 .build();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Collection<UserResponse> getFollowingUsers(UserEntity user, int page) {
+        final var pageSize = 15;
+        final var pageable = PageRequest.of(page, pageSize);
+        var following = this.followerRepository.findFollowerEntitiesByFollowerUserEntity(user, pageable);
+        var res = new ArrayList<UserEntity>();
+        for(var follower : following)
+            res.add(follower.getFollowingUserEntity());
+        return res.stream().map(this.userMapper::toUserResponse).collect(Collectors.toList());
     }
 }

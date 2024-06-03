@@ -1,5 +1,7 @@
 package com.unicalsocial.backend.follower;
 
+import com.unicalsocial.backend.user.UserEntity;
+import com.unicalsocial.backend.user.UserResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -7,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
 
 @RestController
 @AllArgsConstructor
@@ -16,6 +20,11 @@ import org.springframework.web.bind.annotation.*;
 public class FollowerRestController {
     private final FollowerService followerService;
 
+    @GetMapping(value = "/following")
+    ResponseEntity<Collection<UserResponse>> getFollowers(Authentication authentication, @RequestParam(defaultValue = "0") int page) {
+        var loggedUser = (UserEntity) authentication.getPrincipal();
+        return ResponseEntity.ok(this.followerService.getFollowingUsers(loggedUser, page));
+    }
 
     @GetMapping(value = "/followers-total/{user_id}")
     ResponseEntity<FollowerNumberResponse> countFollowers(@PathVariable int user_id) {

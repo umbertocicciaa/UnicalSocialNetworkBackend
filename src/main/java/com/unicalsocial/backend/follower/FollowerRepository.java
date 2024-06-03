@@ -1,9 +1,13 @@
 package com.unicalsocial.backend.follower;
 
+import com.unicalsocial.backend.user.UserEntity;
 import io.swagger.v3.oas.annotations.Hidden;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
 
 @Hidden
 public interface FollowerRepository extends JpaRepository<FollowerEntity,FollowerId> {
@@ -13,4 +17,7 @@ public interface FollowerRepository extends JpaRepository<FollowerEntity,Followe
 
     @Query("SELECT COUNT(f) FROM FollowerEntity f WHERE f.id.followerUserId = :userId")
     Long countFollowingByUserId(@Param("userId") Integer userId);
+
+    Slice<FollowerEntity> findFollowerEntitiesByFollowerUserEntity(UserEntity followerUserEntity,Pageable pageable);
+
 }
