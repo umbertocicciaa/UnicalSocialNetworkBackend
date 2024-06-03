@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Getter
@@ -17,7 +18,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Hidden
 @Table(name = "message")
-public class Message {
+public class Message implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ColumnDefault("nextval('message_id_seq'")

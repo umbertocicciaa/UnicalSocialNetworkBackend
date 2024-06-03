@@ -17,9 +17,9 @@ public class MessageServiceImpl implements MessageService {
     private final UserRepository userRepository;
 
     @Override
-    public Message saveMessage(Message message,Long userId, Long recipientId) {
+    public Message saveMessage(Message message) {
         message.setSentDatetime(Instant.now());
-        var conversation = conversationRepository.findOrCreateConversation(userId, recipientId, userRepository);
+        var conversation = conversationRepository.findOrCreateConversation(message.getSender().getId(), message.getRecipient().getId(), userRepository);
         message.setConversation(conversation);
         return messageRepository.save(message);
     }

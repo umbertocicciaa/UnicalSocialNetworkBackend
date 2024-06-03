@@ -19,6 +19,6 @@ public class ConversationController {
 
     @GetMapping(value = "/conversations/{sender}/{reciver}")
     ResponseEntity<Integer> getConversations(@PathVariable("sender") int sender,@PathVariable("reciver") int reciver){
-        return ResponseEntity.ok(this.conversationService.findByParticipants((long)sender,(long)reciver));
+        return ResponseEntity.ok(this.conversationService.findByParticipants(sender,reciver));
     }
 }

@@ -13,9 +13,9 @@ import java.util.Set;
 public interface ConversationRepository extends JpaRepository<Conversation, Integer> {
     @Query("SELECT c FROM Conversation c JOIN c.participants p1 JOIN c.participants p2 " +
             "WHERE p1.id = ?1 AND p2.id = ?2")
-    Optional<Conversation> findByParticipants(Long participant1Id, Long participant2Id);
+    Optional<Conversation> findByParticipants(Integer participant1Id, Integer participant2Id);
 
-    default Conversation findOrCreateConversation(Long senderId, Long recipientId, UserRepository userRepository) {
+    default Conversation findOrCreateConversation(Integer senderId, Integer recipientId, UserRepository userRepository) {
         Optional<Conversation> optionalConversation = findByParticipants(senderId, recipientId);
         if (optionalConversation.isPresent()) {
             return optionalConversation.get();

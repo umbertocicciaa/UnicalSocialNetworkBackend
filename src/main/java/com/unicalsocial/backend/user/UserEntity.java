@@ -27,7 +27,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "\"user\"")
 public class UserEntity implements UserDetails, Principal {
-
     @Id
     @GeneratedValue
     private Integer id;

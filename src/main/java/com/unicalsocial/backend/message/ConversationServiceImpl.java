@@ -15,7 +15,7 @@ public class ConversationServiceImpl implements ConversationService {
     private final ConversationRepository conversationRepository;
     private final UserRepository userRepository;
     @Override
-    public Integer findByParticipants(Long participant1Id, Long participant2Id) {
+    public Integer findByParticipants(Integer participant1Id, Integer participant2Id) {
         return this.conversationRepository.findOrCreateConversation(participant1Id,participant2Id,userRepository).getId();
     }
 }

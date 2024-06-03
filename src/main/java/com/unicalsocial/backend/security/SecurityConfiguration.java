@@ -51,7 +51,7 @@ public class SecurityConfiguration {
             "/swagger-ui/**",
             "/webjars/**",
             "/swagger-ui.html",
-            "/chat-socket"
+            "/chat-socket/**"
     };
 
     private final JwtAuthenticationFilter jwtAuthFilter;

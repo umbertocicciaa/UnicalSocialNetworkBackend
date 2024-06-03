@@ -26,7 +26,7 @@ public class Conversation {
     @Column(name = "conversation_name", nullable = false, length = Integer.MAX_VALUE)
     private String conversationName;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "conversation_participants",
             joinColumns = @JoinColumn(name = "conversation_id"),
