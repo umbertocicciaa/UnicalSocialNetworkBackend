@@ -133,7 +133,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PostDeletedResponse deletePost(long postId, Authentication authentication) {
         if (postId < Integer.MIN_VALUE || postId > Integer.MAX_VALUE) {
-            throw new IllegalArgumentException("Invalid postId: " + postId);
+            throw new CastLongIntNonRiuscito("Invalid postId: " + postId);
         }
         var user = (UserEntity) authentication.getPrincipal();
         var post = this.postRepository.findById(Math.toIntExact(postId)).orElseThrow(PostNotFoundException::new);

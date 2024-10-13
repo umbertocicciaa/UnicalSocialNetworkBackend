@@ -183,6 +183,19 @@ public class GlobalExceptionHandler {
                 );
     }
 
+    @ExceptionHandler(CastLongIntNonRiuscito.class)
+    public ResponseEntity<ExceptionResponse> handleException(CastLongIntNonRiuscito exp){
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(
+                        ExceptionResponse.builder()
+                                .businessErrorCode(BAD_REQUEST.value())
+                                .businessErrorDescription("Casting long int non riuscito")
+                                .error(exp.getMessage())
+                                .build()
+                );
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception exp) {
         return ResponseEntity
