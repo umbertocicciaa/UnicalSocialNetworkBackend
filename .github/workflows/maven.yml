@@ -27,7 +27,14 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
-        
+
+    - name: Update application.yml with secrets
+      run: |
+        sed -i 's/password: .*/password: '${{ secrets.DB_PASSWORD }}'/' src/main/resources/application.yml
+        sed -i 's|url: .*|url: '${{ secrets.DB_URL }}'|' src/main/resources/application.yml
+        sed -i 's/username: .*/username: '${{ secrets.DB_USER }}'/' src/main/resources/application.yml
+        sed -i 's/secret-key: .*/secret-key: '${{ secrets.JWT_TOKEN }}'/' src/main/resources/application.yml
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       env:
